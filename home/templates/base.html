@@ -1,0 +1,24 @@
+{% load static %}
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Django Vue TE(a)CHupport</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+<body class="container">
+    <noscript>
+        <strong>We're sorry but frontend doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app">
+        <app></app>
+    </div>
+
+    {% render_bundle 'app' %}
+
+</body>
+</html>

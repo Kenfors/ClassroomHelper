@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block links %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock links %}
+
+{% block scripts %}
+
+
+{% endblock scripts %}
+
+
+
+{% block body %}
+<div id="app">
+    <app-header>
+        <h1>[[Header]]</h1>        
+        <app-nav></app-nav>
+    </app-header>
+    <app-body>
+        <app-page></app-page>
+        <app-side></app-side>
+    </app-body>
+</div>
+
+{% endblock body %}
