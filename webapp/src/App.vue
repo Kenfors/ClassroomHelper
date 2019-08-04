@@ -1,39 +1,59 @@
 <template>
   <div id="app" class="container-fluid">
-    <Header title="Classroom Helper"></Header>
-    <div class="container-fluid row">
-      <LSide></LSide>
-      <Page></Page>
-      <RSide></RSide>
+    <div class="jumbotron row justify-items-center">
+      <div class="col-10">
+        <h1>Class Helper!</h1>
+
+      </div>
+      <div class="col-2">
+        <Logon></Logon>
+      </div>
     </div>
-    <Footer></Footer>
+    <div class="row" id="content">
+
+    </div>
+
   </div>
 </template>
 
 <script>
 
-import Header from './components/Header.vue'
-import LSide from './components/LSide.vue'
-import Page from './components/Page.vue'
-import RSide from './components/RSide.vue'
-import Footer from './components/Footer.vue'
+import Logon from './components/Logon.vue'
 
 export default {
   name: 'app',
   components: {
-    Header,
-    LSide,
-    Page,
-    RSide,
-    Footer
-  }
+    Logon,
+
+  },
+  data: function () {
+    return {
+      isLoggedin: this.$root.isAuthenticated,//function () { return GoogleAPI.logonStatus();},
+    }
+  },
+  computed: {
+    
+  },
+  methods: {
+    
+  },
+  watch: {
+
+  },
+  mounted(){
+    
+    
+  },
 }
 
 </script>
 
 <style>
-#app{
 
+#content {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
+
 
 </style>
