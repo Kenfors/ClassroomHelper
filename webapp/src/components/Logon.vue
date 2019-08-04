@@ -8,7 +8,7 @@
       <h4>{{UserName}}</h4>
       <div class="container align-self-center">
         <button v-if="!LoginStatus" v-on:click="signIn" class="btn btn-outline-success align-self-center">Logga in</button>
-        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-outline-danger align-self-center">Logga Ut</button>
+        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-danger align-self-center">Logga Ut</button>
       </div>
   </div>
 </template>
@@ -51,40 +51,57 @@ export default {
       var vm = this;
       vm.GClient.load('client:auth2', function() {
           // Ready. Make a call to gapi.auth2.init or some other API 
-          vm.GClient.auth2.init({
-              apiKey: API_KEY,
-              clientId: CLIENT_ID,
-              discoveryDocs: DISCOVERY_DOCS,
-              scope: SCOPES 
-          }).then(function(){
-              vm.GClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
-                vm.updateSignin(val);
-              });
-              vm.updateSignin(vm.GClient.auth2.getAuthInstance().isSignedIn.get());
+          vm.GClient.client.load('classroom', 'v1', function(){
+            vm.GClient.auth2.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES 
+            }).then(function(){
               
-              //document.getElementById('btn-login').onclick = function(){gapi.auth2.getAuthInstance().signIn();};
-              //document.getElementById('btn-logout').onclick = function(){gapi.auth2.getAuthInstance().signOut();};
+  
+  
+            }).then(function(){
+                vm.GClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
+                  vm.updateSignin(val);
+                });
+                vm.updateSignin(vm.GClient.auth2.getAuthInstance().isSignedIn.get());
+                
+                //document.getElementById('btn-login').onclick = function(){gapi.auth2.getAuthInstance().signIn();};
+                //document.getElementById('btn-logout').onclick = function(){gapi.auth2.getAuthInstance().signOut();};
+  
+            }, function(error){
+              // eslint-disable-next-line
+              console.log("E:" + error);
+            });
 
-          }, function(error){
-            // eslint-disable-next-line
-            console.log("E:" + error);
-          });
+        });
       });
     },
     updateSignin: function(isSignedIn){
       if (isSignedIn) {
         this.$root.isAuthenticated = true;
-
-        let profile = this.GClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-        this.UserName = profile.getName();
-        this.UserPicture = profile.getImageUrl();
-        this.UserID = profile.getId();
-
+        
       } else {
           this.$root.isAuthenticated = false;
           this.UserName = '';
 
       }
+    },
+    postLogin: function(){
+        let profile = this.GClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        this.UserName = profile.getName();
+        this.UserPicture = profile.getImageUrl();
+        this.UserID = profile.getId();
+
+        /*
+        this.GClient.client.classroom.courses.list({
+          pageSize: 10,
+        }).then(function(answer){
+            console.log(answer.result);
+        });
+        */
+
     },
     signIn: function(){
       this.GClient.auth2.getAuthInstance().signIn();
@@ -98,7 +115,10 @@ export default {
 
   },
   mounted(){
-    this.login();
+    if(!this.LoginStatus)
+      this.login();
+    else
+      this.postLogin();
     
   },
 }

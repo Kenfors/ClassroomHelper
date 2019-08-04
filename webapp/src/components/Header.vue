@@ -1,0 +1,56 @@
+
+
+<template>
+<header class="jumbotron row justify-items-center">
+    <div class="col-10 bg-clean ">
+        <h1>Class Tracker!</h1>
+
+    </div>
+    <div class="col-2 justify-self-left bg-clean">
+        <Logon class="sticky-top"></Logon>
+    </div>
+</header>
+</template>
+
+
+<script>
+
+import Logon from './Logon.vue'
+
+export default {
+  name: 'app',
+  components: {
+      Logon,
+  },
+  data: function () {
+    return {
+        BannerImage: '',
+
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    
+  },
+  watch: {
+
+  },
+  mounted(){
+
+    
+  },
+}
+
+</script>
+
+<style>
+header {
+    background-color: transparent !important;
+}
+.bg-clean {
+    background-color: rgba(255, 185, 145, 0.5);
+    text-shadow: 0 0 8px white;
+}
+</style>

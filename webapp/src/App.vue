@@ -1,20 +1,23 @@
 <template>
   <div id="app" class="container-fluid">
     <!-- TOP-->
-    <div class="jumbotron row justify-items-center">
-      <div class="col-10">
-        <h1>Class Tracker!</h1>
-
-      </div>
-      <div class="col-2">
-        <Logon class="sticky-top"></Logon>
-      </div>
-    </div>
-
+    <Header></Header>
 
     <!-- MAIN -->
     <div class="row" id="content">
-      <main style="height:900px;"></main>
+
+      <aside class="col-2">
+
+      </aside>
+
+      <main class="col-8" style="height:900px;">
+        <CourseList></CourseList>
+      </main>
+
+      <aside class="col-2">
+        
+      </aside>
+
     </div>
 
   </div>
@@ -22,12 +25,14 @@
 
 <script>
 
-import Logon from './components/Logon.vue'
+import Header from './components/Header.vue'
+import CourseList from './components/CourseList.vue'
 
 export default {
   name: 'app',
   components: {
-    Logon,
+    Header,
+    CourseList,
 
   },
   data: function () {
@@ -58,6 +63,15 @@ export default {
   margin-top: 1em;
   margin-bottom: 1em;
 }
+body {
+  background-image: linear-gradient(-33deg, rgb(114, 66, 121), rgb(107, 49, 58), rgb(114, 66, 121), rgb(107, 49, 58));
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
 
+.bg-clean {
+    background-color: rgba(255, 185, 145, 0.5);
+    text-shadow: 0 0 8px white;
+}
 
 </style>
