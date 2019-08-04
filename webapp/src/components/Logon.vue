@@ -1,15 +1,17 @@
 
 
 <template>
-  <div class="container border rounded p-5" v-bind:class="{'border-danger' : LoginStatus}" id="content">
-      <img v-if="LoginStatus" v-bind:src="UserPicture" alt="Pic">
+  <div class="container p-5 justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="content">
+      <div class="container align-self-center w-100">
+        <img v-if="LoginStatus" v-bind:src="UserPicture" alt="Pic">
+      </div>
       <h4>{{UserName}}</h4>
-      <button v-if="!LoginStatus" v-on:click="signIn" class="btn btn-outline-success">Logga in</button>
-      <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-outline-danger">Logga Ut</button>
+      <div class="container align-self-center">
+        <button v-if="!LoginStatus" v-on:click="signIn" class="btn btn-outline-success align-self-center">Logga in</button>
+        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-outline-danger align-self-center">Logga Ut</button>
+      </div>
   </div>
 </template>
-
-
 
 
 <script>
@@ -34,7 +36,7 @@ export default {
       LoginStatus : this.$root.isAuthenticated,
       UserName : '',
       UserPicture : '',
-
+      UserID : '',
 
     }
   },
@@ -76,6 +78,7 @@ export default {
         let profile = this.GClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
         this.UserName = profile.getName();
         this.UserPicture = profile.getImageUrl();
+        this.UserID = profile.getId();
 
       } else {
           this.$root.isAuthenticated = false;

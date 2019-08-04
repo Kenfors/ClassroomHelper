@@ -1,16 +1,20 @@
 <template>
   <div id="app" class="container-fluid">
+    <!-- TOP-->
     <div class="jumbotron row justify-items-center">
       <div class="col-10">
-        <h1>Class Helper!</h1>
+        <h1>Class Tracker!</h1>
 
       </div>
       <div class="col-2">
-        <Logon></Logon>
+        <Logon class="sticky-top"></Logon>
       </div>
     </div>
-    <div class="row" id="content">
 
+
+    <!-- MAIN -->
+    <div class="row" id="content">
+      <main style="height:900px;"></main>
     </div>
 
   </div>
