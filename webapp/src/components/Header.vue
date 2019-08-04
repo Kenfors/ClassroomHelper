@@ -1,23 +1,56 @@
+
+
 <template>
-  <header class="jumbotron">
-    <h1>{{ title }}</h1>
+<header class="jumbotron row justify-items-center">
+    <div class="col-10 bg-clean ">
+        <h1>Class Tracker!</h1>
 
-  </header>
-
+    </div>
+    <div class="col-2 justify-self-left bg-clean">
+        <Logon class="sticky-top"></Logon>
+    </div>
+</header>
 </template>
 
+
 <script>
+
+import Logon from './Logon.vue'
+
 export default {
-  name: 'Header',
-  props: {
-    title: String
-  }
+  name: 'app',
+  components: {
+      Logon,
+  },
+  data: function () {
+    return {
+        BannerImage: '',
+
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    
+  },
+  watch: {
+
+  },
+  mounted(){
+
+    
+  },
 }
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-
-
+<style>
+header {
+    background-color: transparent !important;
+}
+.bg-clean {
+    background-color: rgba(255, 185, 145, 0.5);
+    text-shadow: 0 0 8px white;
+}
 </style>
