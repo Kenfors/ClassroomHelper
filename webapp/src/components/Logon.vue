@@ -1,15 +1,17 @@
 
 
 <template>
-  <div class="container p-5 justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="content">
+  <div class="container justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="content">
       <div class="container align-self-center w-100">
         <img v-if="LoginStatus" v-bind:src="UserPicture" alt="Pic">
       </div>
       <h4>{{UserName}}</h4>
-      <div class="container align-self-center">
-        <button v-if="!LoginStatus" v-on:click="signIn" class="btn btn-outline-success align-self-center">Logga in</button>
-        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-danger align-self-center">Logga Ut</button>
+      <div v-if="Loading" class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
       </div>
+        <button v-if="!LoginStatus && !Loading" v-on:click="signIn" class="btn btn-outline-success align-self-center m-5">Logga in</button>
+        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-danger align-self-center">Logga Ut</button>
+
   </div>
 </template>
 
@@ -34,6 +36,7 @@ export default {
     return {
       GClient : this.$root.$GoogleClient,
       LoginStatus : this.$root.isAuthenticated,
+      Loading: false,
       UserName : '',
       UserPicture : '',
       UserID : '',
@@ -49,8 +52,10 @@ export default {
   methods: {
     login: function(){
       var vm = this;
+      this.Loading = true;
       vm.GClient.load('client:auth2', function() {
-          // Ready. Make a call to gapi.auth2.init or some other API 
+          // Ready. Make a call to gapi.auth2.init or some other API
+
           vm.GClient.client.load('classroom', 'v1', function(){
             vm.GClient.auth2.init({
                 apiKey: API_KEY,
@@ -66,13 +71,14 @@ export default {
                   vm.updateSignin(val);
                 });
                 vm.updateSignin(vm.GClient.auth2.getAuthInstance().isSignedIn.get());
-                
+                vm.Loading = false;
                 //document.getElementById('btn-login').onclick = function(){gapi.auth2.getAuthInstance().signIn();};
                 //document.getElementById('btn-logout').onclick = function(){gapi.auth2.getAuthInstance().signOut();};
   
             }, function(error){
               // eslint-disable-next-line
               console.log("E:" + error);
+              vm.Loading = false;
             });
 
         });

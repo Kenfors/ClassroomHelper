@@ -1,21 +1,16 @@
 <template>
   <div id="app" class="container-fluid">
     <!-- TOP-->
-    <Header></Header>
+    <Header class="bg-dark text-white my-5"></Header>
 
     <!-- MAIN -->
     <div class="row" id="content">
 
-      <aside class="col-2">
-
-      </aside>
-
-      <main class="col-8" style="height:900px;">
-        <CourseList></CourseList>
+      <main class="col-10 bg-light text-dark rounded-lg" style="height:900px;">
       </main>
 
-      <aside class="col-2">
-        
+      <aside class="col-2 bg-dark text-white">
+        <CourseList></CourseList>
       </aside>
 
     </div>
@@ -64,14 +59,13 @@ export default {
   margin-bottom: 1em;
 }
 body {
-  background-image: linear-gradient(-33deg, rgb(114, 66, 121), rgb(107, 49, 58), rgb(114, 66, 121), rgb(107, 49, 58));
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+
 }
 
-.bg-clean {
-    background-color: rgba(255, 185, 145, 0.5);
-    text-shadow: 0 0 8px white;
+main {
+
+
 }
+
 
 </style>

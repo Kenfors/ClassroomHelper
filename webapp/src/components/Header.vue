@@ -1,7 +1,7 @@
 
 
 <template>
-<header class="jumbotron row justify-items-center">
+<header class="row justify-items-center">
     <div class="col-10 bg-clean ">
         <h1>Class Tracker!</h1>
 
@@ -49,8 +49,5 @@ export default {
 header {
     background-color: transparent !important;
 }
-.bg-clean {
-    background-color: rgba(255, 185, 145, 0.5);
-    text-shadow: 0 0 8px white;
-}
+
 </style>

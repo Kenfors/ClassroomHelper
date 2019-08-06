@@ -2,11 +2,16 @@
 
 <template>
 <div class="container">
-    <div>
-
+    <h3>Kurser</h3>
+    <div v-if="Loading" class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
     </div>
-    <div v-if="Failed">
-        ERRRER
+    <button v-for="course in Courses" v-bind:key="course.id" class="btn btn-outline-light btn-block my-2" >
+        {{ course.name }}
+    </button>
+    <div v-if="Failed" class="alert alert-danger" >
+        Error.
+
     </div>
 </div>
 </template>
@@ -22,7 +27,10 @@ export default {
   data: function () {
     return {
         GClient : this.$root.$GoogleClient,
+        Loading: false,
         Failed : false,
+        Courses: [],
+
     }
   },
   computed: {
@@ -31,18 +39,21 @@ export default {
   methods: {
     getCourses: function(){
         var vm = this;
-
+        this.Loading = true;
         this.GClient.client.classroom.courses.list({
             pageSize: 20,
         }).then(function(courseQuery){
             vm.Failed = false;
             // eslint-disable-next-line
             console.log(courseQuery.result);
+            vm.Courses = courseQuery.result.courses;
+            vm.Loading = false;
 
         }, function(error){
             vm.Failed = true;
             // eslint-disable-next-line
             console.log("E:" + error);
+            vm.Loading = false;
         });
     
     },
@@ -62,9 +73,5 @@ export default {
 header {
     background-color: transparent !important;
 }
-.readableText {
-    background-color: rgba(255, 185, 145, 0.5);
-    text-shadow: 0 0 8px white;
-    
-}
+
 </style>
