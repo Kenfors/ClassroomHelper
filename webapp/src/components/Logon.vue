@@ -2,15 +2,17 @@
 
 <template>
   <div class="container justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="content">
-      <div class="container align-self-center w-100">
-        <img v-if="LoginStatus" v-bind:src="UserPicture" alt="Pic">
+      <div class="container justify-items-center w-100">
+        <img v-if="LoginStatus" v-bind:src="UserPicture" class="mx-auto" style="display:block;" alt="Pic">
       </div>
-      <h4>{{UserName}}</h4>
-      <div v-if="Loading" class="spinner-border" role="status">
+      <h4 class="text-center">{{UserName}}</h4>
+      <div v-if="Loading" class="spinner-border m-5" role="status">
           <span class="sr-only">Loading...</span>
       </div>
-        <button v-if="!LoginStatus && !Loading" v-on:click="signIn" class="btn btn-outline-success align-self-center m-5">Logga in</button>
-        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-danger align-self-center">Logga Ut</button>
+      <div class="container">
+        <button v-if="!LoginStatus && !Loading" v-on:click="signIn" class="btn btn-outline-success m-5" >Logga in</button>
+        <button v-if="LoginStatus" v-on:click="signOut" class="btn btn-danger mx-auto " style="display:block;">Logga Ut</button>
+      </div>
 
   </div>
 </template>
@@ -40,6 +42,7 @@ export default {
       UserName : '',
       UserPicture : '',
       UserID : '',
+      AuthInstance : null,
 
     }
   },
@@ -72,6 +75,9 @@ export default {
                 });
                 vm.updateSignin(vm.GClient.auth2.getAuthInstance().isSignedIn.get());
                 vm.Loading = false;
+                
+                
+
                 //document.getElementById('btn-login').onclick = function(){gapi.auth2.getAuthInstance().signIn();};
                 //document.getElementById('btn-logout').onclick = function(){gapi.auth2.getAuthInstance().signOut();};
   
@@ -85,6 +91,12 @@ export default {
       });
     },
     updateSignin: function(isSignedIn){
+      
+      // eslint-disable-next-line
+      console.log("Ello=!");
+      // eslint-disable-next-line
+      console.log(this.GClient.auth2.getAuthInstance());
+
       if (isSignedIn) {
         this.$root.isAuthenticated = true;
         

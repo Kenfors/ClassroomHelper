@@ -6,9 +6,16 @@
     <div v-if="Loading" class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
     </div>
-    <button v-for="course in Courses" v-bind:key="course.id" class="btn btn-outline-light btn-block my-2" >
-        {{ course.name }}
-    </button>
+    <div 
+        v-for="course in Courses" 
+        v-bind:key="course.id" 
+        class="row"
+        id="courseItem">
+        <button class="btn btn-outline-light text-truncate m-2" style="max-width: 60%; height:auto;">{{ course.name }}</button>
+        <button class="btn btn-outline-light my-2" style="max-width: 20%; height:auto;" v-on:click="openClassroom(course.alternateLink)">
+            <img src="../assets/classIcon.png" alt="" class="rounded img-fluid">
+        </button>
+    </div>
     <div v-if="Failed" class="alert alert-danger" >
         Error.
 
@@ -30,6 +37,7 @@ export default {
         Loading: false,
         Failed : false,
         Courses: [],
+        CurrentCourse: -1,
 
     }
   },
@@ -57,6 +65,12 @@ export default {
         });
     
     },
+    openClassroom: function(url){
+        window.open(url);
+    },
+    chooseCourse: function(CourseObject){
+        this.$emit('courseChoice', CourseObject);
+    }
   },
   watch: {
 

@@ -25,7 +25,7 @@ new Vue({
   },
   data: {
     isAuthenticated : false,
-
+    
   },
   mounted : function(){
 
