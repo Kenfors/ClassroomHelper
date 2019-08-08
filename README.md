@@ -9,6 +9,7 @@
 
 ### npm
 - @vue/cli==3.0
+- vue-router
 
 
 # Setup
