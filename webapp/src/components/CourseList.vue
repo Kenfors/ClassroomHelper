@@ -7,11 +7,16 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div 
-        v-for="course in Courses" 
+        v-for="(course, index) in Courses" 
         v-bind:key="course.id" 
         class="row"
         id="courseItem">
-        <button class="btn btn-outline-light text-truncate m-2" style="max-width: 60%; height:auto;">{{ course.name }}</button>
+        <button 
+            class="btn btn-outline-light text-truncate m-2" 
+            style="max-width: 60%; height:auto;"
+            v-bind:class="{'active' : CurrentCourse==index}"
+            v-on:click="chooseCourse(index)"
+        >{{ course.name }}</button>
         <button class="btn btn-outline-light my-2" style="max-width: 20%; height:auto;" v-on:click="openClassroom(course.alternateLink)">
             <img src="../assets/classIcon.png" alt="" class="rounded img-fluid">
         </button>
@@ -33,7 +38,6 @@ export default {
   },
   data: function () {
     return {
-        GClient : this.$root.$GoogleClient,
         Loading: false,
         Failed : false,
         Courses: [],
@@ -47,8 +51,9 @@ export default {
   methods: {
     getCourses: function(){
         var vm = this;
+        var GClient = this.$root.$GoogleClient;
         this.Loading = true;
-        this.GClient.client.classroom.courses.list({
+        GClient.client.classroom.courses.list({
             pageSize: 20,
         }).then(function(courseQuery){
             vm.Failed = false;
@@ -68,8 +73,9 @@ export default {
     openClassroom: function(url){
         window.open(url);
     },
-    chooseCourse: function(CourseObject){
-        this.$emit('courseChoice', CourseObject);
+    chooseCourse: function(courseIndex){
+        this.$emit('courseChoice', this.Courses[courseIndex]);
+        this.CurrentCourse = courseIndex;
     }
   },
   watch: {

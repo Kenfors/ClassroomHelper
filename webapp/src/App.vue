@@ -6,16 +6,16 @@
     <!-- MAIN -->
     <div class="row" id="content">
 
-      <main class="col-10 bg-light text-dark rounded-lg" style="height:900px;">
+      <aside class="col-2 bg-dark text-white pt-5 sticky-top">
 
-
-
-      </main>
-      <aside class="col-2 bg-dark text-white">
-
-          <CourseList></CourseList>
+          <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
 
       </aside>
+      <main class="col-10 bg-light text-dark rounded-lg" style="height:900px;">
+      <keep-alive>
+          <router-view></router-view>
+      </keep-alive>
+      </main>
 
     </div>
 
@@ -38,10 +38,7 @@ export default {
   },
   data: function () {
     return {
-      isLoggedin: this.$root.isAuthenticated,//function () { return GoogleAPI.logonStatus();},
-
-
-
+      isLoggedin: this.$root.isAuthenticated,
 
     }
   },
@@ -49,13 +46,19 @@ export default {
     
   },
   methods: {
+    selectCourse: function(newSelection){
+      this.$root.CurrentCourse = newSelection;
+    },
     
   },
   watch: {
 
   },
   mounted(){
-    
+    var vm = this;
+    this.$on('courseChoice', function(newCourse){
+      vm.CurrentCourse = newCourse;
+    });
     
   },
 }

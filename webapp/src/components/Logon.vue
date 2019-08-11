@@ -36,7 +36,6 @@ export default {
   },
   data: function () {
     return {
-      GClient : this.$root.$GoogleClient,
       LoginStatus : this.$root.isAuthenticated,
       Loading: false,
       UserName : '',
@@ -56,11 +55,11 @@ export default {
     login: function(){
       var vm = this;
       this.Loading = true;
-      vm.GClient.load('client:auth2', function() {
+      this.$root.$GoogleClient.load('client:auth2', function() {
           // Ready. Make a call to gapi.auth2.init or some other API
 
-          vm.GClient.client.load('classroom', 'v1', function(){
-            vm.GClient.auth2.init({
+          vm.$root.$GoogleClient.client.load('classroom', 'v1', function(){
+            vm.$root.$GoogleClient.auth2.init({
                 apiKey: API_KEY,
                 clientId: CLIENT_ID,
                 discoveryDocs: DISCOVERY_DOCS,
@@ -70,10 +69,10 @@ export default {
   
   
             }).then(function(){
-                vm.GClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
+                vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
                   vm.updateSignin(val);
                 });
-                vm.updateSignin(vm.GClient.auth2.getAuthInstance().isSignedIn.get());
+                vm.updateSignin(vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.get());
                 vm.Loading = false;
                 
                 
@@ -93,9 +92,10 @@ export default {
     updateSignin: function(isSignedIn){
       
       // eslint-disable-next-line
-      console.log("Ello=!");
-      // eslint-disable-next-line
-      console.log(this.GClient.auth2.getAuthInstance());
+      //console.log(this.GClient.auth2.getAuthInstance());
+      //Use Google Auth details to Authenticate vs the DRFapi
+
+
 
       if (isSignedIn) {
         this.$root.isAuthenticated = true;
@@ -107,7 +107,7 @@ export default {
       }
     },
     postLogin: function(){
-        let profile = this.GClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
         this.UserName = profile.getName();
         this.UserPicture = profile.getImageUrl();
         this.UserID = profile.getId();
@@ -122,10 +122,10 @@ export default {
 
     },
     signIn: function(){
-      this.GClient.auth2.getAuthInstance().signIn();
+      this.$root.$GoogleClient.auth2.getAuthInstance().signIn();
     },
     signOut: function(){
-      this.GClient.auth2.getAuthInstance().signOut();
+      this.$root.$GoogleClient.auth2.getAuthInstance().signOut();
     },
     
   },

@@ -3,7 +3,7 @@
 <template>
 <header class="row justify-items-center">
     <div class="col-10 bg-clean ">
-        <h1>Class Tracker!</h1>
+        <h1 class="display-1">Kurs övervakaren</h1>
 
     </div>
     <div class="col-2 justify-self-left bg-clean">
