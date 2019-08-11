@@ -1,22 +1,21 @@
 <template>
   <div id="app" class="container-fluid">
     <!-- TOP-->
-    <Header></Header>
-
+    <Header class="bg-dark text-white my-5"></Header>
+    <Navbar class="sticky-top"></Navbar>
     <!-- MAIN -->
     <div class="row" id="content">
 
-      <aside class="col-2">
+      <aside class="col-2 bg-dark text-white pt-5 sticky-top">
+
+          <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
 
       </aside>
-
-      <main class="col-8" style="height:900px;">
-        <CourseList></CourseList>
+      <main class="col-10 bg-light text-dark rounded-lg" style="height:900px;">
+      <keep-alive>
+          <router-view></router-view>
+      </keep-alive>
       </main>
-
-      <aside class="col-2">
-        
-      </aside>
 
     </div>
 
@@ -25,32 +24,41 @@
 
 <script>
 
-import Header from './components/Header.vue'
-import CourseList from './components/CourseList.vue'
+import Header from './components/Header.vue';
+import Navbar from './components/Navbar.vue';
+import CourseList from './components/CourseList.vue';
 
 export default {
   name: 'app',
   components: {
     Header,
     CourseList,
+    Navbar,
 
   },
   data: function () {
     return {
-      isLoggedin: this.$root.isAuthenticated,//function () { return GoogleAPI.logonStatus();},
+      isLoggedin: this.$root.isAuthenticated,
+
     }
   },
   computed: {
     
   },
   methods: {
+    selectCourse: function(newSelection){
+      this.$root.CurrentCourse = newSelection;
+    },
     
   },
   watch: {
 
   },
   mounted(){
-    
+    var vm = this;
+    this.$on('courseChoice', function(newCourse){
+      vm.CurrentCourse = newCourse;
+    });
     
   },
 }
@@ -64,14 +72,13 @@ export default {
   margin-bottom: 1em;
 }
 body {
-  background-image: linear-gradient(-33deg, rgb(114, 66, 121), rgb(107, 49, 58), rgb(114, 66, 121), rgb(107, 49, 58));
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+
 }
 
-.bg-clean {
-    background-color: rgba(255, 185, 145, 0.5);
-    text-shadow: 0 0 8px white;
+main {
+
+
 }
+
 
 </style>
