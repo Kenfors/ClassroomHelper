@@ -3,12 +3,33 @@
 <template>
 <div class="container-fluid">
     <h3 class="display-3">Kursöversikt</h3>
-    <div v-if="!Loading">
-        <div v-if="!Failed" class="container-fluid table-responsive">
+    <div v-if="!Loading" class="row">
+        
+        <div v-if="!Failed" class="col-2">
+            <table class="table table-light table-striped table-bordered table-hover">
+                <thead >
+                    <tr >
+                        <th class="text-break text-uppercase" style="min-width:120px; min-height: 200px; max-height: 200px;">
+                        Namn
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                    v-for="row in TableRows"
+                    v-bind:key="row.name">
+                        <th style="min-width: 200px;height: 50px;" class="text-truncate">{{row.name}}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div v-if="!Failed" class="col-10 table-responsive mx-0 px-0">
             <table class="table table-light table-striped table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <th class="text-break text-uppercase" style="min-width:120px;"
+                    <tr >
+                        <th class="text-truncate text-uppercase" style="min-width:60px; max-width:100px; min-height: 200px; max-height: 200px;"
                         v-for="(column, i) in TableHeader"
                         v-bind:key="i">
                         {{column}}
@@ -19,14 +40,14 @@
                     <tr 
                     v-for="row in TableRows"
                     v-bind:key="row.name">
-                        <th>{{row.name}}</th>
-                        <td 
+                        
+                        <td style="height: 50px;" class="m-0 p-0"
                         v-for="(data, index) in row.submissions"
                         v-bind:key="index"
                         v-bind:style="{'background-color' : data.color}"
                         v-on:click="submissionModal(data.id)"
                         >
-                        <p class="lead" v-if="data.noGrade">!</p>
+                        <span class="lead m-0 p-0" v-if="data.noGrade">!</span>
                         </td>
 
                     </tr>
@@ -38,7 +59,12 @@
             <p>{{ErrorMessage}}</p>
         </div>
     </div>
-    <div v-if="Loading">
+    <div v-if="Loading" >
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only m-5">Loading...</span>
+            </div>
+        </div>
         <div class="progress">
             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" v-bind:style="{'width' : loadProgress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -107,6 +133,7 @@ export default {
                 let students = studentQuery.result.students;
                 let works = workQuery.result.courseWork;
 
+                vm.TData = {};
                 for(let i = 0; i < studentQuery.result.students.length; i++){
                     let newStudent = {};
                     newStudent['name'] = students[i].profile.name.fullName;
@@ -117,7 +144,9 @@ export default {
 
                 vm.pendingWorks = works.length;
                 vm.totalWorks = works.length;
-                vm.TableHeader.push('Namn');
+                vm.TableHeader = [];
+                vm.TableRows = [];
+                //vm.TableHeader.push('Namn');
                 for(let i = 0; i < works.length;i++){
                     vm.TableHeader.push(works[i].title);
                     

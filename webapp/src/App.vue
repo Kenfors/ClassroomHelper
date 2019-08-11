@@ -11,7 +11,7 @@
           <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
 
       </aside>
-      <main class="col-10 bg-light text-dark rounded-lg" style="height:900px;">
+      <main class="col-10 bg-light text-dark rounded-lg">
       <keep-alive>
           <router-view></router-view>
       </keep-alive>
