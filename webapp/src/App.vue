@@ -7,15 +7,14 @@
     <div class="row" id="content">
 
       <aside class="col-2 bg-dark text-white pt-5 sticky-top">
-
           <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
-
       </aside>
-      <main class="col-10 bg-light text-dark rounded-lg">
-      <keep-alive>
-          <router-view></router-view>
-      </keep-alive>
-      </main>
+
+        <main class="col-10 bg-light text-dark rounded-lg">
+          <keep-alive>
+              <router-view></router-view>
+          </keep-alive>
+        </main>
 
     </div>
 
@@ -79,6 +78,5 @@ main {
 
 
 }
-
 
 </style>

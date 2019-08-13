@@ -60,11 +60,6 @@
         </div>
     </div>
     <div v-if="Loading" >
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only m-5">Loading...</span>
-            </div>
-        </div>
         <div class="progress">
             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" v-bind:style="{'width' : loadProgress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -84,11 +79,6 @@ export default {
   components: {
       
   },
-  props: function(){
-      return{
-
-      }
-  },
   data: function () {
     return {
         Loading: false,
@@ -98,6 +88,7 @@ export default {
         TableHeader: [],
         TableRows: [],
         TData: {},
+
         pendingWorks: 0,
         totalWorks: 0,
 
@@ -114,14 +105,20 @@ export default {
   },
   methods: {
       getTableData: function(){
-          if(!this.$root.CurrentCourse){
-              return;
-          }
+
           this.TableHeader = [];
-          var courseID = this.$root.CurrentCourse.id;
+          var courseID = this.$route.params.courseid;
           var vm = this;
           var GClient = this.$root.$GoogleClient;
+          this.pendingWorks = -1;
+
+          if(!courseID){
+              console.log("No course id.");
+              return;
+          }
+
           this.Loading = true;
+          this.Failed = false;
           this.totalWorks = 0;
 
           GClient.client.classroom.courses.students.list({
@@ -130,29 +127,41 @@ export default {
               GClient.client.classroom.courses.courseWork.list({
                   courseId : courseID,
               }).then(function(workQuery){
+
                 let students = studentQuery.result.students;
                 let works = workQuery.result.courseWork;
 
                 vm.TData = {};
-                for(let i = 0; i < studentQuery.result.students.length; i++){
-                    let newStudent = {};
-                    newStudent['name'] = students[i].profile.name.fullName;
-                    newStudent['id'] = students[i].userId;
-                    newStudent['submissions'] = new Array(works.length);
-                    vm.TData[students[i].userId] = newStudent;
+
+                try {
+                    for(let i = 0; i < studentQuery.result.students.length; i++){
+                        let newStudent = {};
+                        newStudent['name'] = students[i].profile.name.fullName;
+                        newStudent['id'] = students[i].userId;
+                        newStudent['submissions'] = new Array(works.length);
+                        vm.TData[students[i].userId] = newStudent;
+                    }
+
+                    vm.pendingWorks = works.length;
+                    vm.totalWorks = works.length;
+                    vm.TableHeader = [];
+                    vm.TableRows = [];
+                    //vm.TableHeader.push('Namn');
+                    for(let i = 0; i < works.length;i++){
+                        vm.TableHeader.push(works[i].title);
+                        
+                        vm.loadSubmissions(i, works[i].id, courseID);
+
+                    }
+
+
+                } catch (error) {
+                    vm.Failed = true;
+                    vm.Loading = false;
+                    vm.ErrorMessage = error;
                 }
 
-                vm.pendingWorks = works.length;
-                vm.totalWorks = works.length;
-                vm.TableHeader = [];
-                vm.TableRows = [];
-                //vm.TableHeader.push('Namn');
-                for(let i = 0; i < works.length;i++){
-                    vm.TableHeader.push(works[i].title);
-                    
-                    vm.loadSubmissions(i, works[i].id, courseID);
-
-                }
+                
 
 
               }, function(error){
@@ -175,40 +184,56 @@ export default {
                 courseId : cID,
                 courseWorkId : wID,
             }).then(function(submissionQuery){
-                let subs = submissionQuery.result.studentSubmissions;
 
-                for(let i = 0; i < subs.length; i++){
-                    let tableEntry = {};
-                    tableEntry['id'] = subs[i].id;
-                    tableEntry['noGrade'] = false;
-                    switch (subs[i].state) {
-                        case 'CREATED':
-                            tableEntry['color'] = 'red';
-                            break;
-                        case 'NEW':
-                            tableEntry['color'] = 'purple';
-                            break;
-                        case 'RECLAIMED_BY_STUDENT':
-                        case 'RETURNED':
-                            tableEntry['color'] = 'yellow';
-                            break;
-                        case 'TURNED_IN':
-                            tableEntry['color'] = 'green';
-                            if(!subs[i].assignedGrade && !subs[i].draftGrade ){
-                                tableEntry['noGrade'] = true;
-                            }
-                            break;
-                        default:
-                            tableEntry['color'] = 'white';
+                try {
+                    let subs = submissionQuery.result.studentSubmissions;
+                    for(let i = 0; i < subs.length; i++){
+                        let tableEntry = {};
+                        tableEntry['id'] = subs[i].id;
+                        tableEntry['noGrade'] = false;
+                        switch (subs[i].state) {
+                            case 'CREATED':
+                                tableEntry['color'] = 'red';
+                                break;
+                            case 'NEW':
+                                tableEntry['color'] = 'purple';
+                                break;
+                            case 'RECLAIMED_BY_STUDENT':
+                            case 'RETURNED':
+                                tableEntry['color'] = 'yellow';
+                                break;
+                            case 'TURNED_IN':
+                                tableEntry['color'] = 'green';
+                                if(!subs[i].assignedGrade && !subs[i].draftGrade ){
+                                    tableEntry['noGrade'] = true;
+                                }
+                                break;
+                            default:
+                                tableEntry['color'] = 'white';
+                        }
+
+                        tableEntry['link'] = subs[i].alternateLink;
+
+                        vm.TData[subs[i].userId].submissions[workIndex] = tableEntry;
                     }
-
-                    tableEntry['link'] = subs[i].alternateLink;
-
-                    vm.TData[subs[i].userId].submissions[workIndex] = tableEntry;
-                }
 
                 vm.pendingWorks--;
 
+
+                } catch (error) {
+                    vm.Failed = true;
+                    vm.Loading = false;
+                    vm.ErrorMessage = error;
+                }
+
+                
+
+                
+
+            }, function(error){
+                vm.Failed = true;
+                vm.Loading = false;
+                vm.ErrorMessage = error;
             });
       },
 
@@ -225,13 +250,16 @@ export default {
           console.log("Submission ID: " + subID);
 
       },
-
   },
   watch: {
-      $route (to){
-          if(to.path == "/submissions"){
-              this.getTableData();
-          }
+      '$route.params.courseid' (to){
+          if(this.Loading) return;
+          this.getTableData();
+      },
+      '$route.name' (to){
+          if(this.Loading) return;
+          if(to == 'submissions')
+            this.getTableData();
       },
       pendingWorks (to){
           if(to === 0){
@@ -243,7 +271,7 @@ export default {
       }
   },
   mounted(){    
-      
+      this.getTableData();
       
   },
 }
