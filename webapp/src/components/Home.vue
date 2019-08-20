@@ -1,7 +1,7 @@
 
 
 <template>
-<div class="container">
+<div class="container-fluid">
     <h3 class="display-3">Hem</h3>
 
 

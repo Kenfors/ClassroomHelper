@@ -55,12 +55,19 @@ export default {
         this.Loading = true;
         GClient.client.classroom.courses.list({
             pageSize: 20,
+            courseStates: 'ACTIVE',
+
         }).then(function(courseQuery){
             vm.Failed = false;
-            // eslint-disable-next-line
-            console.log(courseQuery.result);
             vm.Courses = courseQuery.result.courses;
             vm.Loading = false;
+
+            let cid = vm.$route.params.courseid;
+            for(let i = 0; i < vm.Courses.length;i++){
+                if(vm.Courses[i].id == cid){
+                    vm.chooseCourse(i);
+                }
+            }
 
         }, function(error){
             vm.Failed = true;
@@ -75,6 +82,10 @@ export default {
     },
     chooseCourse: function(courseIndex){
         this.$emit('courseChoice', this.Courses[courseIndex]);
+        let cid = this.Courses[courseIndex].id
+    
+        this.$root.$router.push({name: this.$route.params.name, params: { courseid: cid }});
+
         this.CurrentCourse = courseIndex;
     }
   },
@@ -83,7 +94,6 @@ export default {
   },
   mounted(){    
       this.getCourses();
-      
   },
 }
 

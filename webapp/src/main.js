@@ -14,13 +14,15 @@ Vue.config.productionTip = false
 
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/submissions', component: CourseTable },
-  { path: '/feedback', component: Home },
+  {path: '', redirect: '/home'},
+  { name: 'home', path: '/home/:courseid', component: Home },
+  { name: 'submissions', path: '/submissions/:courseid', component: CourseTable },
+  { name: 'feedback', path: '/feedback/:courseid', component: Home },
 ]
 
 const router = new VueRouter({
-  routes // short for `routes: routes`
+  routes: routes, // short for `routes: routes`
+  mode: 'history', 
 })
 
 

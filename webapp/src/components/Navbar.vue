@@ -8,7 +8,7 @@
   <div class="col-10 bg-dark text-white">
     <nav class="nav py-1 btn-group btn-group-lg">
         
-        <button class="btn btn-outline-light mx-2" v-on:click="redirect('/',1)" v-bind:class="{'active' : activeBar==1}">
+        <button class="btn btn-outline-light mx-2" v-on:click="redirect('home',1)" v-bind:class="{'active' : activeBar==1}">
         <img src="../assets/icon-home.svg" class="d-inline-block align-top" alt="">
         Hem</button>
         <button class="btn btn-outline-light mx-2" v-on:click="redirect('submissions',2)" v-bind:class="{'active' : activeBar==2}">
@@ -31,7 +31,7 @@ export default {
   },
   data: function () {
     return {
-      activeBar : 1,
+      activeBar : -1,
 
     }
   },
@@ -42,7 +42,12 @@ export default {
     
     redirect: function(urlPath, activeIndex){
       var vm = this;
-      this.$root.$router.push(urlPath,
+      let cid = '?';
+      if(this.$root.CurrentCourse){
+        cid = this.$root.CurrentCourse.id;
+      }
+
+      this.$root.$router.push({name: urlPath, params:{ courseid: cid}},
       function(){
         //Complete
         vm.activeBar = activeIndex;
@@ -61,7 +66,12 @@ export default {
 
   },
   mounted(){    
-      
+      if(this.$route.name == 'home')
+        this.activeBar = 1;
+      if(this.$route.name == 'submissions')
+        this.activeBar = 2;
+      if(this.$route.name == 'feedback')
+        this.activeBar = 3;
   },
 }
 
