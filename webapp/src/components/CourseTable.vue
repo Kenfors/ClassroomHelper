@@ -75,7 +75,7 @@
         </div>
     </div>
     <div v-if="Loading" >
-        <div class="progress">
+        <div class="progress my-5">
             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" v-bind:style="{'width' : loadProgress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>

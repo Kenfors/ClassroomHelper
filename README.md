@@ -7,8 +7,14 @@
 - django==2.2.1
 - django-webpack-loader==0.6.0
 
+- django-rest-framwork 
+pip install djangorestframework
+pip install markdown
+pip install django-filter
+
 ### npm
 - @vue/cli==3.0
+- npm install vue-router
 
 
 # Setup
