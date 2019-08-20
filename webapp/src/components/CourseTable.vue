@@ -2,7 +2,23 @@
 
 <template>
 <div class="container-fluid">
-    <h3 class="display-3">Kursöversikt</h3>
+    <h3 class="display-3">Inlämningar</h3>
+    <div class="row" v-if="!Failed && !Loading">
+        <button
+            v-on:click="getTableData()"
+            class="btn btn-outline-info mx-4">
+            Uppdatera tabell
+        </button>
+        <h5>
+            <span class="badge" style="background-color: green;">Klar</span>
+            <span class="badge" style="background-color: lightgreen;">Orättad</span>
+            <span class="badge" style="background-color: yellow;">Tillbakasänd</span>
+            <span class="badge" style="background-color: red;">Ej inlämnad</span>
+            <span class="badge" style="background-color: purple;">Ej påbörjad</span>
+        </h5>
+    </div>
+
+
     <div v-if="!Loading" class="row">
         
         <div v-if="!Failed" class="col-2">
@@ -41,13 +57,12 @@
                     v-for="row in TableRows"
                     v-bind:key="row.name">
                         
-                        <td style="height: 50px;" class="m-0 p-0"
+                        <td style="height: 50px;" class="m-0 p-0 text-center hover"
                         v-for="(data, index) in row.submissions"
                         v-bind:key="index"
                         v-bind:style="{'background-color' : data.color}"
-                        v-on:click="submissionModal(data.id)"
+                        v-on:click="submissionModal(data.id, data.link)"
                         >
-                        <span class="lead m-0 p-0" v-if="data.noGrade">!</span>
                         </td>
 
                     </tr>
@@ -203,13 +218,20 @@ export default {
                                 tableEntry['color'] = 'yellow';
                                 break;
                             case 'TURNED_IN':
-                                tableEntry['color'] = 'green';
-                                if(!subs[i].assignedGrade && !subs[i].draftGrade ){
+                                tableEntry['color'] = 'lightgreen';
+                                if( subs[i].assignedGrade >= 0 || subs[i].draftGrade >= 0){
+                                }
+                                else {
                                     tableEntry['noGrade'] = true;
                                 }
                                 break;
                             default:
                                 tableEntry['color'] = 'white';
+                        }
+
+                        if( subs[i].assignedGrade >= 0 || subs[i].draftGrade >= 0){
+                            tableEntry['noGrade'] = false;
+                            tableEntry['color'] = 'darkgreen';
                         }
 
                         tableEntry['link'] = subs[i].alternateLink;
@@ -226,9 +248,6 @@ export default {
                     vm.ErrorMessage = error;
                 }
 
-                
-
-                
 
             }, function(error){
                 vm.Failed = true;
@@ -245,9 +264,11 @@ export default {
                 }
             }
       },
-      submissionModal: function(subID){
+      submissionModal: function(subID, link){
           // eslint-disable-next-line
           console.log("Submission ID: " + subID);
+
+          window.open(link);
 
       },
   },
@@ -280,5 +301,9 @@ export default {
 
 <style>
 
+.hover:hover{
+    opacity: 0.2;
+    cursor: pointer;
+}
 
 </style>

@@ -11,9 +11,11 @@
       </aside>
 
         <main class="col-10 bg-light text-dark rounded-lg">
+          <transition name="fade" class="container-fluid">
           <keep-alive>
               <router-view></router-view>
           </keep-alive>
+          </transition>
         </main>
 
     </div>
@@ -77,6 +79,16 @@ body {
 main {
 
 
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s ease-out;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 </style>
