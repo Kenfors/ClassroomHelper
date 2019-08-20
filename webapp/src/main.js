@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App.vue'
 import LoginScreen from './LoginScreen.vue'
 import CourseTable from './components/CourseTable.vue'
+import LogPage from './components/course_log/LogPage.vue'
 import Home from './components/Home.vue'
 
 Vue.config.productionTip = false
@@ -17,7 +18,7 @@ const routes = [
   {path: '', redirect: '/home'},
   { name: 'home', path: '/home/:courseid', component: Home },
   { name: 'submissions', path: '/submissions/:courseid', component: CourseTable },
-  { name: 'feedback', path: '/feedback/:courseid', component: Home },
+  { name: 'feedback', path: '/feedback/:courseid', component: LogPage },
 ]
 
 const router = new VueRouter({

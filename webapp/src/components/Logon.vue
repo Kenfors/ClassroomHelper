@@ -90,15 +90,9 @@ export default {
       });
     },
     updateSignin: function(isSignedIn){
-      
-      // eslint-disable-next-line
-      //console.log(this.GClient.auth2.getAuthInstance());
-      //Use Google Auth details to Authenticate vs the DRFapi
-
-
 
       if (isSignedIn) {
-        this.$root.isAuthenticated = true;
+        this.apiLogon(true);
         
       } else {
           this.$root.isAuthenticated = false;
@@ -106,6 +100,38 @@ export default {
 
       }
     },
+
+    apiLogon: function(gStatus){
+      let fetch = new XMLHttpRequest();
+      //let csrfslug = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+      let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+      let vm = this;
+      let authData = {
+        mail : profile.getEmail(),
+        ID : profile.getId(),
+        name : profile.getName(),
+        first : profile.getGivenName(),
+        last : profile.getFamilyName(),
+      }
+
+      fetch.onreadystatechange = function(event){
+        if (this.readyState == 4 && this.status == 200){
+          let resp = JSON.parse(this.response);
+          vm.$root.isAuthenticated = resp.success && gStatus;
+          vm.postLogin();
+        }
+        else{
+          vm.Failed = true;
+        }
+      };
+
+      fetch.open("POST", "/api/auth/", true);
+      fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+      fetch.setRequestHeader("Content-Type", "application/json");
+      fetch.send(JSON.stringify(authData));
+    },
+
+
     postLogin: function(){
         let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
         this.UserName = profile.getName();

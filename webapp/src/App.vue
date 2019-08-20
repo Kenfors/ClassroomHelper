@@ -84,8 +84,6 @@ main {
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s ease-out;
   opacity: 0;
-  margin: 0;
-  padding: 0;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
