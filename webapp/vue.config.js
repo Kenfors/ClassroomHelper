@@ -1,8 +1,7 @@
 const BundleTracker = require("webpack-bundle-tracker");
-
 module.exports = {
-    baseUrl: "http://127.0.0.1:8080/",
-    outputDir: './dist/',
+    baseUrl: process.env.NODE_ENV === 'production' ? 'http://classroomsupport.net/static/dist/' : 'http://127.0.0.1:8080/',
+    outputDir: '../static/dist/',
 
     chainWebpack: config => {
 
@@ -11,7 +10,9 @@ module.exports = {
 
         config
             .plugin('BundleTracker')
-            .use(BundleTracker, [{filename: '../webapp/webpack-stats.json'}])
+            .use(BundleTracker, [{
+                filename: process.env.NODE_ENV === 'production' ? '../webapp/webpack-stats-prod.json' : '../webapp/webpack-stats.json'
+            }])
 
         config.resolve.alias
             .set('__STATIC__', 'static')
@@ -25,4 +26,5 @@ module.exports = {
             .https(false)
             .headers({"Access-Control-Allow-Origin": ["\*"]})
             }
-        };
+
+};
