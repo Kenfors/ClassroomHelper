@@ -20,7 +20,7 @@ ALLOWED_HOSTS = []
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['classroomsupport.net']
 
 
 # Application definition
