@@ -15,6 +15,7 @@ with open(os.path.join(BASE_DIR, 'servermode.json')) as f:
 SECRET_KEY = 'k^7g9v3quxdd_e^_12$ktbyln7+*%vuo0*_+pqif!%!5f+iwlo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+ALLOWED_HOSTS = []
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
