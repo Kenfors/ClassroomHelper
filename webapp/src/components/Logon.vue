@@ -19,6 +19,7 @@
 
 
 <script>
+/*
 var CLIENT_ID = '1045641075151-6fc0n5uqhoobih2v6nqimdv8uub0a9dv.apps.googleusercontent.com';
 var API_KEY = 'AIzaSyDNCzSzosDQ00kQH8rd-ObNgRlRDvMdHVE';
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest"];
@@ -27,7 +28,9 @@ SCOPES += " https://www.googleapis.com/auth/classroom.coursework.me.readonly ";
 SCOPES += " https://www.googleapis.com/auth/classroom.rosters.readonly ";
 SCOPES += " https://www.googleapis.com/auth/classroom.coursework.students.readonly ";
 SCOPES += " https://www.googleapis.com/auth/userinfo.email";
+*/
 
+import {mapActions} from 'vuex'
 
 export default {
   name: 'app',
@@ -36,7 +39,6 @@ export default {
   },
   data: function () {
     return {
-      LoginStatus : this.$root.isAuthenticated,
       Loading: false,
       UserName : '',
       UserPicture : '',
@@ -50,8 +52,17 @@ export default {
       if(this.LoginStatus) return 'border-danger';
       return 'border-success';
     },
+    LoginStatus : function(){
+      return this.$store.getters['auth/isAuthenticated'];
+    },
+    ...mapActions([
+      'auth/signin',
+      'auth/signout',
+
+    ]),
   },
   methods: {
+/*
     login: function(){
       var vm = this;
       this.Loading = true;
@@ -72,7 +83,7 @@ export default {
                 vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
                   vm.updateSignin(val);
                 });
-                vm.updateSignin(vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.get());
+                  vm.updateSignin(vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.get());
                 vm.Loading = false;
                 
                 
@@ -89,19 +100,22 @@ export default {
         });
       });
     },
+*/
+/*
     updateSignin: function(isSignedIn){
 
       if (isSignedIn) {
         this.apiLogon(true);
         
       } else {
-          this.$root.isAuthenticated = false;
-          this.UserName = '';
+        this.UserName = '';
+        this.$store.dispatch('authenticate', false);
 
       }
     },
-
+*/
     apiLogon: function(gStatus){
+/*
       let fetch = new XMLHttpRequest();
       //let csrfslug = document.getElementsByName('csrfmiddlewaretoken')[0].value;
       let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
@@ -114,10 +128,11 @@ export default {
         last : profile.getFamilyName(),
       }
 
-      fetch.onreadystatechange = function(event){
+      fetch.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
           let resp = JSON.parse(this.response);
-          vm.$root.isAuthenticated = resp.success && gStatus;
+          vm.$store.dispatch('authenticate', resp.success && gStatus);
+          vm.$store.dispatch('setUser', authData);
           vm.postLogin();
         }
         else{
@@ -129,29 +144,24 @@ export default {
       fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
       fetch.setRequestHeader("Content-Type", "application/json");
       fetch.send(JSON.stringify(authData));
+*/
     },
 
-
     postLogin: function(){
-        let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-        this.UserName = profile.getName();
-        this.UserPicture = profile.getImageUrl();
-        this.UserID = profile.getId();
-
-        /*
-        this.GClient.client.classroom.courses.list({
-          pageSize: 10,
-        }).then(function(answer){
-            console.log(answer.result);
-        });
-        */
+      this.Loading = false;
+      
+      let profile = this.$store.getters['auth/profile'];
+      this.UserName = profile.getName();
+      this.UserPicture = profile.getImageUrl();
+      this.UserID = profile.getId();
 
     },
     signIn: function(){
-      this.$root.$GoogleClient.auth2.getAuthInstance().signIn();
+      this.Loading = true;
+      this['auth/signin'];
     },
     signOut: function(){
-      this.$root.$GoogleClient.auth2.getAuthInstance().signOut();
+      this['auth/signout'];
     },
     
   },
@@ -159,12 +169,10 @@ export default {
 
   },
   mounted(){
-    if(!this.LoginStatus)
-      this.login();
-    else
+    if(this.LoginStatus)
       this.postLogin();
-    
   },
+
 }
 
 </script>

@@ -5,16 +5,16 @@
   <div class="col-2 bg-dark">
 
   </div>
-  <div class="col-10 bg-dark text-white">
-    <nav class="nav py-1 btn-group btn-group-lg">
+  <div class="col-10 bg-dark text-white p-0">
+    <nav class="nav py-2 btn-group btn-group-lg ">
         
-        <button class="btn btn-outline-light mx-2" v-on:click="redirect('home',1)" v-bind:class="{'active' : activeBar==1}">
+        <button class="btn btn-outline-light" v-on:click="redirect('home',1)" v-bind:class="{'active' : activeBar==1}">
         <img src="../assets/icon-home.svg" class="d-inline-block align-top" alt="">
-        Hem</button>
-        <button class="btn btn-outline-light mx-2" v-on:click="redirect('submissions',2)" v-bind:class="{'active' : activeBar==2}">
+        Agenda</button>
+        <button class="btn btn-outline-light" v-on:click="redirect('submissions',2)" v-bind:class="{'active' : activeBar==2}">
         <img src="../assets/icon-book.svg" class="d-inline-block align-top" alt="">
         Kursöversikt</button>
-        <button class="btn btn-outline-light mx-2" v-on:click="redirect('feedback',3)" v-bind:class="{'active' : activeBar==3}">
+        <button class="btn btn-outline-light" v-on:click="redirect('feedback',3)" v-bind:class="{'active' : activeBar==3}">
         <img src="../assets/icon-star.svg" class="d-inline-block align-top" alt="">
         Loggbok</button>
     </nav>
@@ -42,23 +42,20 @@ export default {
     
     redirect: function(urlPath, activeIndex){
       var vm = this;
-      let cid = '?';
-      if(this.$root.CurrentCourse){
-        cid = this.$root.CurrentCourse.id;
+      let cid = 'nocourse';
+      if(this.$store.getters.currentCourse){
+        cid = this.$store.getters.currentCourse.id;
       }
 
       this.$root.$router.push({name: urlPath, params:{ courseid: cid}},
       function(){
         //Complete
         vm.activeBar = activeIndex;
-        // eslint-disable-next-line
-        console.log("Route Success..");
 
       },
       function(){
         //Failed
-        // eslint-disable-next-line
-        console.log("Route Failed..");
+
       });
     },
   },

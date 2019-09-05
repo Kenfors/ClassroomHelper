@@ -1,21 +1,28 @@
 
 
 <template>
-<div class="container-fluid">
-    <h3 class="display-3">Hem</h3>
+  <div class="m-2">
+    <div class="container border border-dark">
+
+    Hello!
 
 
 
-</div>
+    </div>
+  </div>
 </template>
 
 
 <script>
 
 export default {
-  name: 'app',
+  name: 'card',
   components: {
       
+  },
+  props: {
+    course : Object,
+
   },
   data: function () {
     return {
@@ -23,15 +30,15 @@ export default {
         Loading: false,
         Failed : false,
 
-
-
     }
   },
   computed: {
       
   },
   methods: {
-
+    setup: function(){
+      
+    },
   },
   watch: {
 
