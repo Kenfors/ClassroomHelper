@@ -9,7 +9,7 @@
     </div>
     <div class="col-2 justify-self-left bg-clean">
 
-            <Logon class="sticky-top"></Logon>
+        <Logon class="sticky-top"></Logon>
 
     </div>
 </header>

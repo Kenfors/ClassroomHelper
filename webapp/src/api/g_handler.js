@@ -91,6 +91,17 @@ export default {
         }
     },
 
+    getCourses: (context) => {
+        if(GCLIENT.auth2.getAuthInstance().isSignedIn.get()){
+            GCLIENT.client.classroom.courses.list({
+                pageSize: 20,
+                courseStates: 'ACTIVE',
+            }).then(function(courseQuery){
+                let courses = courseQuery.result.courses;
+                context.commit('updateCourses', courses);
+            });
+        }
+    },
 
     profile: () => {
         return GCLIENT.auth2.getAuthInstance().currentUser.get().getBasicProfile();

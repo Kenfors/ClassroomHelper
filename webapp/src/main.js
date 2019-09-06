@@ -20,8 +20,8 @@ import { mapGetters, mapState } from 'vuex'
  */
 import App from './App.vue'
 import LoginScreen from './LoginScreen.vue'
-//import CourseTable from './components/CourseTable.vue'
-//import LogPage from './components/course_log/LogPage.vue'
+import SubmissionPage from './components/submissions/SubmissionPage.vue'
+import LogPage from './components/course_log/LogPage.vue'
 import Home from './components/home/Home.vue'
 
 
@@ -34,14 +34,18 @@ Vue.config.productionTip = false
  */
 const routes = [
   {path: '', redirect: 'home'},
-  { name: 'home', path: '/home/:courseid', component: Home },
-  //{ name: 'submissions', path: '/submissions/:courseid', component: CourseTable },
-  //{ name: 'feedback', path: '/feedback/:courseid', component: LogPage },
-]
+  { name: 'home', path: '/home', component: Home },
+  { name: 'home+', path: '/home', component: Home },
+  { name: 'submissions', path: '/submissions', component: SubmissionPage },
+  { name: 'submissions+', path: '/submissions/:courseid', component: SubmissionPage },
+  { name: 'feedback', path: '/feedback', component: LogPage },
+  { name: 'feedback+', path: '/feedback/:courseid', component: LogPage },
+];
+
 const router = new VueRouter({
   routes: routes, // short for `routes: routes`
   mode: 'history', 
-})
+});
 
 
 /**

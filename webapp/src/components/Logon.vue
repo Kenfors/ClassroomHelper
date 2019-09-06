@@ -1,7 +1,7 @@
 
 
 <template>
-  <div class="container justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="content">
+  <div class="container justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="logoncontent">
       <div class="container justify-items-center w-100">
         <img v-if="LoginStatus" v-bind:src="UserPicture" class="mx-auto" style="display:block;" alt="Pic">
       </div>
@@ -30,7 +30,7 @@ SCOPES += " https://www.googleapis.com/auth/classroom.coursework.students.readon
 SCOPES += " https://www.googleapis.com/auth/userinfo.email";
 */
 
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: 'app',
@@ -52,9 +52,13 @@ export default {
       if(this.LoginStatus) return 'border-danger';
       return 'border-success';
     },
-    LoginStatus : function(){
-      return this.$store.getters['auth/isAuthenticated'];
-    },
+//    LoginStatus : function(){
+//      return this['auth/isAuthenticated'];
+//    },
+    ...mapGetters({
+      LoginStatus : 'auth/isAuthenticated',
+      
+    }),
     ...mapActions([
       'auth/signin',
       'auth/signout',
@@ -62,90 +66,6 @@ export default {
     ]),
   },
   methods: {
-/*
-    login: function(){
-      var vm = this;
-      this.Loading = true;
-      this.$root.$GoogleClient.load('client:auth2', function() {
-          // Ready. Make a call to gapi.auth2.init or some other API
-
-          vm.$root.$GoogleClient.client.load('classroom', 'v1', function(){
-            vm.$root.$GoogleClient.auth2.init({
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                discoveryDocs: DISCOVERY_DOCS,
-                scope: SCOPES 
-            }).then(function(){
-              
-  
-  
-            }).then(function(){
-                vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
-                  vm.updateSignin(val);
-                });
-                  vm.updateSignin(vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.get());
-                vm.Loading = false;
-                
-                
-
-                //document.getElementById('btn-login').onclick = function(){gapi.auth2.getAuthInstance().signIn();};
-                //document.getElementById('btn-logout').onclick = function(){gapi.auth2.getAuthInstance().signOut();};
-  
-            }, function(error){
-              // eslint-disable-next-line
-              console.log("E:" + error);
-              vm.Loading = false;
-            });
-
-        });
-      });
-    },
-*/
-/*
-    updateSignin: function(isSignedIn){
-
-      if (isSignedIn) {
-        this.apiLogon(true);
-        
-      } else {
-        this.UserName = '';
-        this.$store.dispatch('authenticate', false);
-
-      }
-    },
-*/
-    apiLogon: function(gStatus){
-/*
-      let fetch = new XMLHttpRequest();
-      //let csrfslug = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-      let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-      let vm = this;
-      let authData = {
-        mail : profile.getEmail(),
-        ID : profile.getId(),
-        name : profile.getName(),
-        first : profile.getGivenName(),
-        last : profile.getFamilyName(),
-      }
-
-      fetch.onreadystatechange = function(){
-        if (this.readyState == 4 && this.status == 200){
-          let resp = JSON.parse(this.response);
-          vm.$store.dispatch('authenticate', resp.success && gStatus);
-          vm.$store.dispatch('setUser', authData);
-          vm.postLogin();
-        }
-        else{
-          vm.Failed = true;
-        }
-      };
-
-      fetch.open("POST", "/api/auth/", true);
-      fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
-      fetch.setRequestHeader("Content-Type", "application/json");
-      fetch.send(JSON.stringify(authData));
-*/
-    },
 
     postLogin: function(){
       this.Loading = false;
@@ -179,10 +99,9 @@ export default {
 
 <style>
 
-#content {
+#logoncontent {
   margin-top: 1em;
   margin-bottom: 1em;
 }
-
 
 </style>
