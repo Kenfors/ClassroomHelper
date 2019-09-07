@@ -22,6 +22,7 @@ const getters = {
 // actions
 const actions = {
       fetchCourses: (context) => {
+        console.log("fetching courses...");
         GHandler.getCourses(context);
       },
 //    signin: (context) => {

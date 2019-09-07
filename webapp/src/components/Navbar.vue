@@ -1,8 +1,8 @@
 
 
 <template>
-<div class="col-12 row">
-  <div class="col-10 bg-dark p-0 text-white">
+<div class="row p-3 p-0 bg-NTI text-white">
+  <div class="col-12 p-0">
     <nav class="btn-group my-1 sticky-top">
         <button class="btn btn-outline-light" v-on:click="redirect('home',1)" v-bind:class="{'active' : activeBar==1}">
         <img src="../assets/icon-home.svg" class="d-inline-block align-top" alt="">
@@ -15,9 +15,9 @@
         Loggbok</button>
     </nav>
   </div>
-  <div class="col-12 row" style="min-height: 50px;">
+  <div class="col-12 p-0" style="min-height: 50px;">
     <transition name="fade" mode="out-in">
-    <div class="col-10 bg-dark p-0 text-white" v-if="activeBar != 1">
+    <div class="col-10 bg-NTI p-0 text-white" v-if="activeBar != 1">
       <nav class="btn-group my-1 sticky-top">
         <button class="btn btn-outline-light"
         v-for="(course, index) in Courses"

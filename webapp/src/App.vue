@@ -1,12 +1,12 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app" class="m-0 p-0 bg-NTI">
     <!-- TOP-->
-    <Header class="bg-dark text-white"></Header>
-    <Navbar class="sticky-top"></Navbar>
+    <Header class="text-white m-0 p-0"></Header>
+    <Navbar class="sticky-top m-0 p-0"></Navbar>
     <!-- MAIN -->
-    <div class="row">
+    <div class="col-12 row">
         
-      <aside class="col-2 bg-dark text-white pt-5 sticky-top">
+      <aside class="col-1 bg-NTI text-white pt-5">
       <!--
           <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
       -->
@@ -48,19 +48,22 @@ export default {
     }
   },
   computed: {
-    ...mapActions([
-      'classroom/fetchCourses'
-    ]),
     
   },
   methods: {
-    
+    ...mapActions({
+      loadCourseData: 'classroom/fetchCourses',
+      
+    }), 
   },
   watch: {
 
   },
   mounted(){
-    this['classroom/fetchCourses'];
+    console.log("about to fetch courses...");
+    console.log(this['classroom/fetchCourses']);
+    this.loadCourseData();
+    //this['classroom/fetchCourses'];
     this.$root.$router.push({name: 'home', params:{ courseid: 'none'}},
     function(){
       },
@@ -77,7 +80,7 @@ export default {
 #content {
   margin-top: 1em;
   margin-bottom: 1em;
-  min-height: 500px;
+  min-height: 1500px;
 }
 body {
 
@@ -98,6 +101,44 @@ main {
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+
+.fade-enter-active {
+  transition: opacity .5s;
+}
+
+.fade-leave-active {
+  transition: all .0s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.bg-bleach {
+  background-color: blanchedalmond;
+}
+
+.bg-NTI {
+  background-color: rgb(85, 34, 105);
+}
+
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background-color: #000000;
+    border: 2px solid #555555;
 }
 
 </style>

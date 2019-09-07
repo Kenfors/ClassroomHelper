@@ -1,7 +1,7 @@
 
 
 <template>
-  <div class="container justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="logoncontent">
+  <div class="container justify-items-center p-1" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="logoncontent">
       <div class="container justify-items-center w-100">
         <img v-if="LoginStatus" v-bind:src="UserPicture" class="mx-auto" style="display:block;" alt="Pic">
       </div>

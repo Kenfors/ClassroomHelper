@@ -97,6 +97,7 @@ export default {
                 pageSize: 20,
                 courseStates: 'ACTIVE',
             }).then(function(courseQuery){
+                console.log("finding courses...");
                 let courses = courseQuery.result.courses;
                 context.commit('updateCourses', courses);
             });
