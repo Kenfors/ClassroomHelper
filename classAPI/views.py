@@ -103,13 +103,16 @@ def loadAgenda(request):
     print("User:", user)
     print("Request", requestData['courseID'])
 
-    agendaEntry = courseAgenda.objects.get(userKey=user, courseKey=requestData['courseID'])
-    print("Agenda: ", agendaEntry)
+    try:
+        agendaEntry = courseAgenda.objects.get(userKey=user, courseKey=requestData['courseID'])
+        print("Agenda: ", agendaEntry)
 
-    agenda = {
-        'text' : agendaEntry.text,
-    }
-    return JsonResponse(agenda)
+        agenda = {
+            'text' : agendaEntry.text,
+        }
+        return JsonResponse(agenda)
+    except:
+        return JsonResponse({})
 
 
     #print("No agenda for you cunt")

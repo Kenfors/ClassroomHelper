@@ -111,6 +111,7 @@ export default {
     getSubmissions: (context, courseID) => {
         GCLIENT.client.classroom.courses.courseWork.list({
             courseId : courseID,
+            courseWorkStates : 'PUBLISHED',
 
         }).then(function(workQuery){
             console.log("Found coursework successfully...");
@@ -126,13 +127,21 @@ export default {
                     courseWorkId : workList[i].id,
 
                 }).then(function(submissionQuery){
-                    console.log("Found submissions successfully...");
-                    var submissionList = submissionQuery.result.studentSubmissions;
-                    if(i == 0){
-                        console.log("List:");
-                        console.log(submissionList);
+                    //console.log("Found submissions successfully...");
+                    let subList = submissionQuery.result.studentSubmissions;
+                    subList.sort(function(a, b){
+                        if(a.userId > b.userId)
+                            return 1;
+                        return -1;
+                    });
+
+                    let payload = {
+                        size : workList.length,
+                        index : i,
+                        subs : subList,
                     }
-                    context.commit('updateSubmissions', i, submissionList);
+
+                    context.commit('updateSubmissions', payload);
 
                 });
             }
@@ -140,7 +149,22 @@ export default {
         }, function(error){
             console.log(error);
         });
+    },
 
+    getStudents: (context, courseID) => {
+
+        GCLIENT.client.classroom.courses.students.list({
+            courseId: courseID,
+
+        }).then(function(studentQuery){
+            let students = studentQuery.result.students;
+            students.sort(function(a, b){
+                if(a.userId > b.userId)
+                    return 1;
+                return -1;
+            });
+            context.commit('updateStudents', students);
+        });
 
     },
 

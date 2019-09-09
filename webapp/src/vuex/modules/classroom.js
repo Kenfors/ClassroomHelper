@@ -6,7 +6,9 @@ import GHandler from '../../api/g_handler.js'
 const state = {
   courses: [],
   courseWorks: [],
-  
+  submissions: [],
+  students: [],
+
 
 //  auth : false,
 //  profile : Object,
@@ -17,16 +19,9 @@ const state = {
 const getters = {
       getCourses: (state) => {return state.courses;},
       getCourseWorks: (state) => {return state.courseWorks},
-      getSubmissions: (state) => (workID) => {
-        let work = state.courseWorks.find(function(elem){
-          return elem.id = workID;
-        });
-        if (work){
-          if(work.submissions)
-            return work.submissions;
-        }
-        return [];
-      },
+      getSubmissions: (state) => {return state.submissions},
+      getStudents: (state) => {return state.students},
+
 //    isAuthenticated: (state) => {return state.auth;},
 //    profile: (state) => {return state.profile;},
 }
@@ -37,10 +32,11 @@ const actions = {
         GHandler.getCourses(context);
       },
       fetchSubmissions: (context, courseID) => {
-        console.log("Fetching coursework..");
         GHandler.getSubmissions(context, courseID);
       },
-
+      fetchStudents: (context, courseID) => {
+        GHandler.getStudents(context, courseID);
+      },
 }
 
 // mutations
@@ -51,11 +47,18 @@ const mutations = {
       updateCourseWork: (state, courseWorkList) => {
         state.courseWorks = courseWorkList;
       },
-      updateSubmissions: (state, index, submissionList) => {
-        
-        console.log(submissionList);
-        
-        state.courseWorks[index]['submissions'] = submissionList;
+      updateSubmissions: (state, payload) => {
+
+        // Append only in the right place by index, due to mixed order from async calls.
+        if (state.submissions.length < payload.size){
+          state.submissions = new Array(payload.size);
+        }
+        state.submissions.splice(payload.index, 1, payload.subs);
+
+        //state.courseWorks[payload.index]['submissions'] = payload.subs;
+      },
+      updateStudents: (state, studentList) => {
+        state.students = studentList;
       },
 
 //    updateLogin: (state, AuthStatus) => {

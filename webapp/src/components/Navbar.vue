@@ -34,7 +34,7 @@
 
 <script>
 
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'app',
@@ -56,6 +56,9 @@ export default {
 
   },
   methods: {
+    ...mapActions({
+      loadStudents : 'classroom/fetchStudents',
+    }),
     chooseCourse: function(courseID, listIndex){
       let vm = this;
       let urlName = this.$route.name;
@@ -67,6 +70,7 @@ export default {
         function(){
           //Complete
           vm.activeCourseIndex = listIndex;
+          vm.loadStudents(cid);
         },
         function(){
           //Failed

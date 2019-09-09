@@ -115,6 +115,8 @@ main {
   opacity: 0;
 }
 
+
+
 .bg-bleach {
   background-color: blanchedalmond;
 }
@@ -123,22 +125,30 @@ main {
   background-color: rgb(85, 34, 105);
 }
 
+.hoverable:hover {
+  box-shadow: 0 0 8px 2px darkslategray;
+  cursor: pointer;
+}
+
+
+
+
+
 ::-webkit-scrollbar-track
 {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar
 {
-    width: 10px;
+    width: 7px;
     background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb
 {
-    background-color: #000000;
-    border: 2px solid #555555;
+    background-color: #00000052;
+    
 }
 
 </style>
