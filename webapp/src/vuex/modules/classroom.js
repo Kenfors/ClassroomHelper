@@ -5,6 +5,8 @@ import GHandler from '../../api/g_handler.js'
 // initial state
 const state = {
   courses: [],
+  courseWorks: [],
+  
 
 //  auth : false,
 //  profile : Object,
@@ -14,7 +16,17 @@ const state = {
 // getters
 const getters = {
       getCourses: (state) => {return state.courses;},
-      
+      getCourseWorks: (state) => {return state.courseWorks},
+      getSubmissions: (state) => (workID) => {
+        let work = state.courseWorks.find(function(elem){
+          return elem.id = workID;
+        });
+        if (work){
+          if(work.submissions)
+            return work.submissions;
+        }
+        return [];
+      },
 //    isAuthenticated: (state) => {return state.auth;},
 //    profile: (state) => {return state.profile;},
 }
@@ -22,15 +34,12 @@ const getters = {
 // actions
 const actions = {
       fetchCourses: (context) => {
-        console.log("fetching courses...");
         GHandler.getCourses(context);
       },
-//    signin: (context) => {
-//      GHandler.login(context);
-//    },
-//    signout: (context) => {
-//      GHandler.logout(context);
-//    },
+      fetchSubmissions: (context, courseID) => {
+        console.log("Fetching coursework..");
+        GHandler.getSubmissions(context, courseID);
+      },
 
 }
 
@@ -39,6 +48,16 @@ const mutations = {
       updateCourses: (state, courseList) => {
         state.courses = courseList;
       },
+      updateCourseWork: (state, courseWorkList) => {
+        state.courseWorks = courseWorkList;
+      },
+      updateSubmissions: (state, index, submissionList) => {
+        
+        console.log(submissionList);
+        
+        state.courseWorks[index]['submissions'] = submissionList;
+      },
+
 //    updateLogin: (state, AuthStatus) => {
 //      state.auth = AuthStatus;
 //      if(AuthStatus){

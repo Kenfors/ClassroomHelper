@@ -56,7 +56,6 @@ export default {
 
     updateSignin: (context, isSignedIn) => {
         if (isSignedIn) {
-            context.commit('updateLogin', true);
             let fetch = new XMLHttpRequest();
             //let csrfslug = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             let profile = GCLIENT.auth2.getAuthInstance().currentUser.get().getBasicProfile();
@@ -106,6 +105,43 @@ export default {
 
     profile: () => {
         return GCLIENT.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+    },
+
+
+    getSubmissions: (context, courseID) => {
+        GCLIENT.client.classroom.courses.courseWork.list({
+            courseId : courseID,
+
+        }).then(function(workQuery){
+            console.log("Found coursework successfully...");
+            let workList = workQuery.result.courseWork;
+            if(typeof workList === 'undefined')
+                workList = [];
+            
+            context.commit('updateCourseWork', workList);
+            for(let i = 0; i  < workList.length; i++){
+                
+                GCLIENT.client.classroom.courses.courseWork.studentSubmissions.list({
+                    courseId : courseID,
+                    courseWorkId : workList[i].id,
+
+                }).then(function(submissionQuery){
+                    console.log("Found submissions successfully...");
+                    var submissionList = submissionQuery.result.studentSubmissions;
+                    if(i == 0){
+                        console.log("List:");
+                        console.log(submissionList);
+                    }
+                    context.commit('updateSubmissions', i, submissionList);
+
+                });
+            }
+
+        }, function(error){
+            console.log(error);
+        });
+
+
     },
 
 }

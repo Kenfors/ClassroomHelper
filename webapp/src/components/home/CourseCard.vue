@@ -10,7 +10,7 @@
           <i class="material-icons large">local_library</i>
           Classroom
         </button>
-        <h3 class="display-5">{{week}}</h3>
+        <h3 class="display-5">Vecka. {{week}}</h3>
 
 
       </div>
@@ -46,29 +46,26 @@ export default {
   computed: {
       week: function(){
         let d = new Date();
-        let newYear = new Date(d.getYear());
-        console.log(newYear);
-        return 4;
-        //d = new Date(d.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        //let dayNum = d.getUTCDay() || 7;
-        //d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-        //let yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-        //return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+        let newYear = new Date(d.getFullYear(), 0);
+        let diff = d - newYear;
+        diff /= 1000; //Sec
+        diff /= 3600; //Hours
+        diff /= 24; // days
+        diff /= 7; //weeks
+
+        let week = Math.floor(diff +1.1);
+        console.log(week);
+        return week;
+
       },
   },
   methods: {
     ...mapActions([
       
     ]), 
-    setup: function(){
-      
-    },
     openClassroom: function(url){
       window.open(url);
     },
-  },
-  watch: {
-
   },
   mounted(){
 

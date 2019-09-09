@@ -6,7 +6,7 @@ import GHandler from '../../api/g_handler.js'
 
 // initial state
 const state = {
-  agenda: {},
+  agenda: [],
   todo: [],
   saveSuccessfull: false,
 
@@ -17,9 +17,9 @@ const state = {
 
 // getters
 const getters = {
-  getAgenda: (state, id) => {
-    console.log("getting text with..." + id);
-    return state.agenda[id]},
+  getAgenda: (state) => {
+    return state.agenda;
+  },
   getTodolist: (state) => {return state.todo},
       
 //    isAuthenticated: (state) => {return state.auth;},
@@ -55,7 +55,12 @@ const actions = {
 // mutations
 const mutations = {
   setAgenda: (state, Agenda) => {
-    state.agenda[Agenda.courseID] = Agenda.text;
+    for(let i = 0; i < state.agenda.length; i++)
+      if(state.agenda[i].courseID === Agenda.courseID) {
+        state.agenda[i].text = Agenda.text;
+        return;
+      }
+    state.agenda.push(Agenda);
   },
   saveAgendaStatus: (state, didSucceed) => {
     state.saveSuccessfull = didSucceed;
