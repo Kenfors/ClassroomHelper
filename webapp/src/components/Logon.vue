@@ -1,7 +1,7 @@
 
 
 <template>
-  <div class="container justify-items-center" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="content">
+  <div class="container justify-items-center p-1" v-bind:class="{'border rounded border-success' : !LoginStatus}" id="logoncontent">
       <div class="container justify-items-center w-100">
         <img v-if="LoginStatus" v-bind:src="UserPicture" class="mx-auto" style="display:block;" alt="Pic">
       </div>
@@ -19,6 +19,7 @@
 
 
 <script>
+/*
 var CLIENT_ID = '1045641075151-6fc0n5uqhoobih2v6nqimdv8uub0a9dv.apps.googleusercontent.com';
 var API_KEY = 'AIzaSyDNCzSzosDQ00kQH8rd-ObNgRlRDvMdHVE';
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest"];
@@ -27,7 +28,9 @@ SCOPES += " https://www.googleapis.com/auth/classroom.coursework.me.readonly ";
 SCOPES += " https://www.googleapis.com/auth/classroom.rosters.readonly ";
 SCOPES += " https://www.googleapis.com/auth/classroom.coursework.students.readonly ";
 SCOPES += " https://www.googleapis.com/auth/userinfo.email";
+*/
 
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: 'app',
@@ -36,7 +39,6 @@ export default {
   },
   data: function () {
     return {
-      LoginStatus : this.$root.isAuthenticated,
       Loading: false,
       UserName : '',
       UserPicture : '',
@@ -50,108 +52,36 @@ export default {
       if(this.LoginStatus) return 'border-danger';
       return 'border-success';
     },
+//    LoginStatus : function(){
+//      return this['auth/isAuthenticated'];
+//    },
+    ...mapGetters({
+      LoginStatus : 'auth/isAuthenticated',
+      
+    }),
+    ...mapActions([
+      'auth/signin',
+      'auth/signout',
+
+    ]),
   },
   methods: {
-    login: function(){
-      var vm = this;
-      this.Loading = true;
-      this.$root.$GoogleClient.load('client:auth2', function() {
-          // Ready. Make a call to gapi.auth2.init or some other API
-
-          vm.$root.$GoogleClient.client.load('classroom', 'v1', function(){
-            vm.$root.$GoogleClient.auth2.init({
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                discoveryDocs: DISCOVERY_DOCS,
-                scope: SCOPES 
-            }).then(function(){
-              
-  
-  
-            }).then(function(){
-                vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.listen(function(val){
-                  vm.updateSignin(val);
-                });
-                vm.updateSignin(vm.$root.$GoogleClient.auth2.getAuthInstance().isSignedIn.get());
-                vm.Loading = false;
-                
-                
-
-                //document.getElementById('btn-login').onclick = function(){gapi.auth2.getAuthInstance().signIn();};
-                //document.getElementById('btn-logout').onclick = function(){gapi.auth2.getAuthInstance().signOut();};
-  
-            }, function(error){
-              // eslint-disable-next-line
-              console.log("E:" + error);
-              vm.Loading = false;
-            });
-
-        });
-      });
-    },
-    updateSignin: function(isSignedIn){
-
-      if (isSignedIn) {
-        this.apiLogon(true);
-        
-      } else {
-          this.$root.isAuthenticated = false;
-          this.UserName = '';
-
-      }
-    },
-
-    apiLogon: function(gStatus){
-      let fetch = new XMLHttpRequest();
-      //let csrfslug = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-      let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-      let vm = this;
-      let authData = {
-        mail : profile.getEmail(),
-        ID : profile.getId(),
-        name : profile.getName(),
-        first : profile.getGivenName(),
-        last : profile.getFamilyName(),
-      }
-
-      fetch.onreadystatechange = function(event){
-        if (this.readyState == 4 && this.status == 200){
-          let resp = JSON.parse(this.response);
-          vm.$root.isAuthenticated = resp.success && gStatus;
-          vm.postLogin();
-        }
-        else{
-          vm.Failed = true;
-        }
-      };
-
-      fetch.open("POST", "/api/auth/", true);
-      fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
-      fetch.setRequestHeader("Content-Type", "application/json");
-      fetch.send(JSON.stringify(authData));
-    },
-
 
     postLogin: function(){
-        let profile = this.$root.$GoogleClient.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-        this.UserName = profile.getName();
-        this.UserPicture = profile.getImageUrl();
-        this.UserID = profile.getId();
-
-        /*
-        this.GClient.client.classroom.courses.list({
-          pageSize: 10,
-        }).then(function(answer){
-            console.log(answer.result);
-        });
-        */
+      this.Loading = false;
+      
+      let profile = this.$store.getters['auth/profile'];
+      this.UserName = profile.getName();
+      this.UserPicture = profile.getImageUrl();
+      this.UserID = profile.getId();
 
     },
     signIn: function(){
-      this.$root.$GoogleClient.auth2.getAuthInstance().signIn();
+      this.Loading = true;
+      this['auth/signin'];
     },
     signOut: function(){
-      this.$root.$GoogleClient.auth2.getAuthInstance().signOut();
+      this['auth/signout'];
     },
     
   },
@@ -159,22 +89,19 @@ export default {
 
   },
   mounted(){
-    if(!this.LoginStatus)
-      this.login();
-    else
+    if(this.LoginStatus)
       this.postLogin();
-    
   },
+
 }
 
 </script>
 
 <style>
 
-#content {
+#logoncontent {
   margin-top: 1em;
   margin-bottom: 1em;
 }
-
 
 </style>

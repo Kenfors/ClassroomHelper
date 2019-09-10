@@ -10,11 +10,11 @@
             Uppdatera tabell
         </button>
         <h5>
-            <span class="badge" style="background-color: green;">Klar</span>
-            <span class="badge" style="background-color: lightgreen;">Orättad</span>
+            <span class="badge" style="background-color: green;">Betygsatt</span>
+            <span class="badge" style="background-color: lightgreen;">Inlämnad</span>
             <span class="badge" style="background-color: yellow;">Tillbakasänd</span>
             <span class="badge" style="background-color: red;">Ej inlämnad</span>
-            <span class="badge" style="background-color: purple;">Ej påbörjad</span>
+            <span class="badge" style="background-color: purple;">Frånvaro</span>
         </h5>
     </div>
 
@@ -128,7 +128,6 @@ export default {
           this.pendingWorks = -1;
 
           if(!courseID){
-              console.log("No course id.");
               return;
           }
 
@@ -219,9 +218,7 @@ export default {
                                 break;
                             case 'TURNED_IN':
                                 tableEntry['color'] = 'lightgreen';
-                                if( subs[i].assignedGrade >= 0 || subs[i].draftGrade >= 0){
-                                }
-                                else {
+                                if(!( subs[i].assignedGrade >= 0 || subs[i].draftGrade >= 0)){
                                     tableEntry['noGrade'] = true;
                                 }
                                 break;
@@ -273,7 +270,7 @@ export default {
       },
   },
   watch: {
-      '$route.params.courseid' (to){
+      '$route.params.courseid' (){
           if(this.Loading) return;
           this.getTableData();
       },
