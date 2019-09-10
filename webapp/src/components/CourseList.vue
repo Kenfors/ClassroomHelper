@@ -81,11 +81,9 @@ export default {
         window.open(url);
     },
     chooseCourse: function(courseIndex){
-        this.$emit('courseChoice', this.Courses[courseIndex]);
+        this.$store.dispatch('setCourse', this.Courses[courseIndex]);
         let cid = this.Courses[courseIndex].id
-    
         this.$root.$router.push({name: this.$route.params.name, params: { courseid: cid }});
-
         this.CurrentCourse = courseIndex;
     }
   },

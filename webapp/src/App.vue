@@ -1,20 +1,22 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app" class="m-0 p-0 bg-NTI">
     <!-- TOP-->
-    <Header class="bg-dark text-white my-5"></Header>
-    <Navbar class="sticky-top"></Navbar>
+    <Header class="text-white m-0 p-0"></Header>
+    <Navbar class="sticky-top m-0 p-0"></Navbar>
     <!-- MAIN -->
-    <div class="row" id="content">
-
-      <aside class="col-2 bg-dark text-white pt-5 sticky-top">
+    <div class="col-12 row">
+        
+      <aside class="col-1 bg-NTI text-white pt-5">
+      <!--
           <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
+      -->
       </aside>
 
-        <main class="col-10 bg-light text-dark rounded-lg">
-          <transition name="fade" class="container-fluid">
-          <keep-alive>
-              <router-view></router-view>
-          </keep-alive>
+        <main id="content" class="col-10 bg-light text-dark rounded-lg">
+          <transition name="slide-fade" class="container-fluid">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
           </transition>
         </main>
 
@@ -27,19 +29,21 @@
 
 import Header from './components/Header.vue';
 import Navbar from './components/Navbar.vue';
-import CourseList from './components/CourseList.vue';
+//import CourseList from './components/CourseList.vue';
+
+import {mapActions} from 'vuex';
 
 export default {
   name: 'app',
   components: {
     Header,
-    CourseList,
+//    CourseList,
     Navbar,
 
   },
   data: function () {
     return {
-      isLoggedin: this.$root.isAuthenticated,
+      Loading : false,
 
     }
   },
@@ -47,20 +51,25 @@ export default {
     
   },
   methods: {
-    selectCourse: function(newSelection){
-      this.$root.CurrentCourse = newSelection;
-    },
-    
+    ...mapActions({
+      loadCourseData: 'classroom/fetchCourses',
+      
+    }), 
   },
   watch: {
 
   },
   mounted(){
-    var vm = this;
-    this.$on('courseChoice', function(newCourse){
-      vm.CurrentCourse = newCourse;
-    });
-    
+    console.log("about to fetch courses...");
+    console.log(this['classroom/fetchCourses']);
+    this.loadCourseData();
+    //this['classroom/fetchCourses'];
+    this.$root.$router.push({name: 'home', params:{ courseid: 'none'}},
+    function(){
+      },
+      function(){
+        //Failed
+      });
   },
 }
 
@@ -71,6 +80,7 @@ export default {
 #content {
   margin-top: 1em;
   margin-bottom: 1em;
+  min-height: 1500px;
 }
 body {
 
@@ -81,12 +91,64 @@ main {
 
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s ease-out;
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .0s;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
   opacity: 0;
 }
+
+.fade-enter-active {
+  transition: opacity .5s;
+}
+
+.fade-leave-active {
+  transition: all .0s;
+}
+
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+
+
+.bg-bleach {
+  background-color: blanchedalmond;
+}
+
+.bg-NTI {
+  background-color: rgb(85, 34, 105);
+}
+
+.hoverable:hover {
+  box-shadow: 0 0 8px 2px darkslategray;
+  cursor: pointer;
+}
+
+
+
+
+
+::-webkit-scrollbar-track
+{
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+    width: 7px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background-color: #00000052;
+    
 }
 
 </style>
