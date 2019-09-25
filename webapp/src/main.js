@@ -4,8 +4,8 @@ import VueRouter from 'vue-router'
 // eslint-disable-next-line
 import Vuex from 'vuex'
 
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
+
+import '../public/teachsupport-theme.css'
 
 /**
  *  BACKEND STORE
@@ -38,8 +38,8 @@ const routes = [
   { name: 'home+', path: '/home', component: Home },
   { name: 'submissions', path: '/submissions', component: SubmissionPage },
   { name: 'submissions+', path: '/submissions/:courseid', component: SubmissionPage },
-  { name: 'feedback', path: '/feedback', component: LogPage },
-  { name: 'feedback+', path: '/feedback/:courseid', component: LogPage },
+  { name: 'log', path: '/log', component: LogPage },
+  { name: 'log+', path: '/log/:courseid', component: LogPage },
 ];
 
 const router = new VueRouter({

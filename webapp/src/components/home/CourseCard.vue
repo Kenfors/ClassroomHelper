@@ -2,7 +2,7 @@
 
 <template>
   <div class="col-4 ">
-    <div class="container bg-bleach shadow p-3 mb-5 rounded">
+    <div class="container bg-info shadow p-3 mb-5 rounded">
       <h5 class="text-center">{{course.name}}</h5>
       <div class=" mx-1 d-flex justify-content-between">
         <button class="btn btn-outline-dark" 
