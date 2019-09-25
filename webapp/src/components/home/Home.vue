@@ -1,6 +1,6 @@
 <template>
 <div class="container-fluid">
-    <h3 class="display-3">Agenda</h3>
+    <h3 class="display-4">Agenda</h3>
 
     <transition name="fade">
     <div v-if="Loading" class="d-flex justify-content-center">

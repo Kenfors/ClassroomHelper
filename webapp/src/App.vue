@@ -1,18 +1,18 @@
 <template>
-  <div id="app" class="m-0 p-0 bg-NTI">
+  <div id="app" class="m-0 p-0">
     <!-- TOP-->
-    <Header class="text-white m-0 p-0"></Header>
+    <Header class="bg-dark text-white m-0 p-0"></Header>
     <Navbar class="sticky-top m-0 p-0"></Navbar>
     <!-- MAIN -->
     <div class="col-12 row">
         
-      <aside class="col-1 bg-NTI text-white pt-5">
+      <aside class="col-1 text-white pt-5">
       <!--
           <CourseList v-on:courseChoice="selectCourse($event)"></CourseList>
       -->
       </aside>
 
-        <main id="content" class="col-10 bg-light text-dark rounded-lg">
+        <main id="content" class="bg-primary col-10 rounded-lg">
           <transition name="slide-fade" class="container-fluid">
             <keep-alive>
                 <router-view></router-view>
@@ -60,8 +60,6 @@ export default {
 
   },
   mounted(){
-    console.log("about to fetch courses...");
-    console.log(this['classroom/fetchCourses']);
     this.loadCourseData();
     //this['classroom/fetchCourses'];
     this.$root.$router.push({name: 'home', params:{ courseid: 'none'}},
@@ -80,7 +78,6 @@ export default {
 #content {
   margin-top: 1em;
   margin-bottom: 1em;
-  min-height: 1500px;
 }
 body {
 
@@ -115,24 +112,10 @@ main {
   opacity: 0;
 }
 
-
-
-.bg-bleach {
-  background-color: blanchedalmond;
-}
-
-.bg-NTI {
-  background-color: rgb(85, 34, 105);
-}
-
 .hoverable:hover {
-  box-shadow: 0 0 8px 2px darkslategray;
+  opacity: 0.7;
   cursor: pointer;
 }
-
-
-
-
 
 ::-webkit-scrollbar-track
 {
@@ -150,5 +133,16 @@ main {
     background-color: #00000052;
     
 }
+
+.overflow-auto {
+  overflow-y: auto;
+  overflow-x: scroll;
+}
+
+.bg-purple {
+  background-color: indigo;
+
+}
+
 
 </style>

@@ -1,25 +1,25 @@
 
 
 <template>
-<div class="row p-3 p-0 bg-NTI text-white">
+<div class="row p-0 p-0">
   <div class="col-12 p-0">
-    <nav class="btn-group my-1 sticky-top">
-        <button class="btn btn-outline-light" v-on:click="redirect('home',1)" v-bind:class="{'active' : activeBar==1}">
+    <nav class="btn-group my-0 sticky-top">
+        <button class="btn btn-dark rounded-0" v-on:click="redirect('home',1)" v-bind:class="{'active' : activeBar==1}">
         <img src="../assets/icon-home.svg" class="d-inline-block align-top" alt="">
         Agenda</button>
-        <button class="btn btn-lg btn-outline-light" v-on:click="redirect('submissions',2)" v-bind:class="{'active' : activeBar==2}">
+        <button class="btn btn-lg btn-dark rounded-0" v-on:click="redirect('submissions',2)" v-bind:class="{'active' : activeBar==2}">
         <img src="../assets/icon-book.svg" class="d-inline-block align-top" alt="">
         Inlämningar</button>
-        <button class="btn btn-lg btn-outline-light" v-on:click="redirect('feedback',3)" v-bind:class="{'active' : activeBar==3}">
+        <button class="btn btn-lg btn-dark rounded-0" v-on:click="redirect('log',3)" v-bind:class="{'active' : activeBar==3}">
         <img src="../assets/icon-star.svg" class="d-inline-block align-top" alt="">
         Loggbok</button>
     </nav>
   </div>
-  <div class="col-12 p-0" style="min-height: 50px;">
+  <div class="col-12 p-0">
     <transition name="fade" mode="out-in">
     <div class="col-10 bg-NTI p-0 text-white" v-if="activeBar != 1">
-      <nav class="btn-group my-1 sticky-top">
-        <button class="btn btn-outline-light"
+      <nav class="btn-group sticky-top">
+        <button class="btn btn-light rounded-0"
         v-for="(course, index) in Courses"
         v-bind:key="course.id"
         v-on:click="chooseCourse(course.id, index)"
@@ -44,7 +44,7 @@ export default {
   data: function () {
     return {
       activeBar : 1,
-      activeCourseIndex : -1,
+      activeCourseIndex : 1,
 
     }
   },
@@ -105,12 +105,6 @@ export default {
     
   },
   mounted(){
-      if(this.$route.name.startsWith('hom'))
-        this.activeBar = 1;
-      if(this.$route.name.startsWith('sub'))
-        this.activeBar = 2;
-      if(this.$route.name.startsWith('fee'))
-        this.activeBar = 3;
   },
 }
 
@@ -119,9 +113,20 @@ export default {
 <style>
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
+
+
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+  animation: drop-in .8s reverse;
 }
 
+@keyframes drop-in{
+  0% {
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
 </style>

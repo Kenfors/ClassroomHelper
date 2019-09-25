@@ -8,6 +8,8 @@ import GHandler from '../../api/g_handler.js'
 const state = {
   agenda: [],
   todo: [],
+  submissionTexts: [],
+
   saveSuccessfull: false,
 
 //  auth : false,
@@ -22,8 +24,17 @@ const getters = {
   },
   getTodolist: (state) => {return state.todo},
       
-//    isAuthenticated: (state) => {return state.auth;},
-//    profile: (state) => {return state.profile;},
+  getSubmissionText: (state) => {
+    return id => {
+      for(let i = 0; i < state.submissionTexts.length; i++){
+        if(state.submissionTexts[i].id === id){
+          return state.submissionTexts[i].text;
+        }
+      }
+      return null;
+
+    }
+  },
 }
 
 // actions
@@ -42,6 +53,15 @@ const actions = {
   updateTodolist: (context, todolist) => {
     DHandler.updateTodo(context, todolist);
   },
+
+
+  fetchSubmissionComment: (context, attrs) => {
+    DHandler.loadSubmissionComment(context, attrs);
+  },
+  updateSubmissionComment: (context, data) => {
+    DHandler.updateSubmissionComment(context, data);
+  },
+
 
 //    signin: (context) => {
 //      GHandler.login(context);
@@ -66,15 +86,13 @@ const mutations = {
     state.saveSuccessfull = didSucceed;
   },
 
-//    updateLogin: (state, AuthStatus) => {
-//      state.auth = AuthStatus;
-//      if(AuthStatus){
-//        state.profile = GHandler.profile();
-//      }
-//      else{
-//        state.profile = Object;
-//      }
-//    },
+  saveSubmissionComment: (state, didSucceed) => {
+    state.saveSuccessfull = didSucceed;
+  },
+  
+  setSubmissionComment: (state, subText) => {
+    state.submissionTexts.push(subText);
+  },
 
 }
 
