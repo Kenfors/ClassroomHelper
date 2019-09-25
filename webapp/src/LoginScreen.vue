@@ -1,5 +1,5 @@
 <template>
-<div class="container-fluid bg-dark" id="loginpage">
+<div class="container-fluid" id="loginpage">
   <div class="row container-fluid justify-content-center h-75">
       <div class="col-md-auto align-self-center">
         <Logon></Logon>

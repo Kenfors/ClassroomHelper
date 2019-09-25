@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from .serializers import UserSerializer #,GroupSerializer
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
-from .models import courseAgenda
+from .models import courseAgenda, courseSubmissionText
 import json
 
 # Create your views here.
@@ -114,7 +114,45 @@ def loadAgenda(request):
     except:
         return JsonResponse({})
 
+@csrf_exempt
+def loadSubmissionText(request):
+    requestData = json.loads(request.body)
+    print("Submission Text Request:")
+    print(requestData)
 
-    #print("No agenda for you cunt")
+    try:
+        user = request.user
 
-    #return JsonResponse({})
+        if (courseSubmissionText.objects.filter(userKey=user, student=requestData['stu'], submission=requestData['sub']).exists()):
+            submissionText = courseSubmissionText.objects.get(userKey=user, student=requestData['stu'], submission=requestData['sub'])
+            subText = {
+                'sub' : requestData['sub'],
+                'text' : submissionText.text,
+            }
+            return JsonResponse(subText)
+    except:
+        print("E: Cant save submission. :(")
+
+    return JsonResponse({})
+
+@csrf_exempt
+def saveSubmissionText(request):
+    requestData = json.loads(request.body)
+    print("Submission Save Text Request:")
+    print(requestData)
+    
+    try:
+        user = request.user
+
+        if (courseSubmissionText.objects.filter(userKey=user, student=requestData['stu'], submission=requestData['sub']).exists()):
+            submissionText = courseSubmissionText.objects.get(userKey=user, student=requestData['stu'], submission=requestData['sub'])
+            submissionText.text = requestData['text']
+            submissionText.save()
+        else:
+            submissionText = courseSubmissionText(userKey=user, student=requestData['stu'], submission=requestData['sub'], text=requestData['text'])
+            submissionText.save()
+    except:
+        print("E: Cant save submission. :(")
+
+
+    return JsonResponse({})
