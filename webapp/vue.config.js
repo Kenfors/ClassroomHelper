@@ -1,6 +1,6 @@
 const BundleTracker = require("webpack-bundle-tracker");
 module.exports = {
-    baseUrl: process.env.NODE_ENV === 'production' ? 'http://classroomsupport.net/static/dist/' : 'http://127.0.0.1:8080/',
+    baseUrl: process.env.NODE_ENV === 'production' ? 'https://classroomsupport.net/static/dist/' : 'http://127.0.0.1:8080/',
     outputDir: '../static/dist/',
 
     chainWebpack: config => {
