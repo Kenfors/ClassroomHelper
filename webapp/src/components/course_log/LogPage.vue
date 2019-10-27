@@ -15,12 +15,24 @@
           <textarea disabled placeholder="Funktion ej klar" class="form-control col-8" id="" cols="2" rows="2" style="resize: none;"></textarea>
         </div>
       </div>
-      <div class="col-3 bg-info">
-        <h4>Här samlas loginlägg</h4>
+      <div class="col-6 bg-info">
+        <div class="container-fluid"
+        v-if="!Loading">
+          <div class=""
+          v-for="post in Logs" v-bind:key="post">
+            <p>{{post}}</p>
+          </div>
+        </div>
+        <div v-else>
+          <div class="spinner-border m-5" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+
+
       </div>
-      <div class="col-3 bg-info">
-        <h4>Här samlas rättning</h4>
-      </div>
+
     </div>
 </div>
 </template>
@@ -37,7 +49,13 @@ export default {
   },
   data: function () {
     return {
+      Loading: false,
+      
       ActiveStudent: Number,
+      StuID: String,
+      Logs : Array,
+
+
 
     }
   },
@@ -50,6 +68,30 @@ export default {
   methods: {
     chooseStudent: function(index) {
       this.ActiveStudent = index;
+      this.StuID = this.Students[index].userId;
+      this.fetchPosts(this.StuID);
+    },
+    fetchPosts: function(id){
+      this.Loading = true;
+      let vm = this;
+      let fetch = new XMLHttpRequest();
+      fetch.onreadystatechange = function(resp) {
+          let success = (this.readyState == 4 && this.status == 200);
+          vm.Loading = false;
+          let data = Object;
+          try {
+            data = JSON.parse(this.response);
+            
+          } catch (error) {
+            
+          }
+          vm.Logs = data.context;
+      };
+      fetch.open("POST", "/api/summary", true);
+      fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+      fetch.setRequestHeader("Content-Type", "application/json");
+      fetch.send(JSON.stringify({'id': id}));
+
     },
 
   },
@@ -63,7 +105,9 @@ export default {
 
 </script>
 
-<style>
-
+<style scoped>
+.list-group-item {
+  cursor: pointer;
+}
 
 </style>
