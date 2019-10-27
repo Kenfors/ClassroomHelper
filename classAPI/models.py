@@ -20,3 +20,4 @@ class courseSubmissionText(models.Model):
     student = models.CharField(max_length=50)
     submission = models.CharField(max_length=50)
     text = models.TextField()
+    date = models.DateField(auto_now_add=True)

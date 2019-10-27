@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from .serializers import UserSerializer #,GroupSerializer
 from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from .models import courseAgenda, courseSubmissionText
 import json
 
@@ -156,3 +156,29 @@ def saveSubmissionText(request):
 
 
     return JsonResponse({})
+
+@csrf_exempt
+def listPosts(request):
+    if request.method == 'GET':
+        return Http404()
+    
+    requestData = json.loads(request.body)
+    stuId = requestData['id']
+
+
+    user = request.user
+    posts = courseSubmissionText.objects.filter(userKey=user, student=stuId);
+
+    jsonList = []
+    for post in posts:
+        jsonList.append(post.text)
+
+
+    print("Posts:", jsonList)
+
+    data = {
+        'context' : jsonList,
+
+    }
+
+    return JsonResponse(data, safe=False)
