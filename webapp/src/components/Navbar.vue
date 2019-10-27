@@ -44,7 +44,7 @@ export default {
   data: function () {
     return {
       activeBar : 1,
-      activeCourseIndex : 1,
+      activeCourseIndex : -1,
 
     }
   },

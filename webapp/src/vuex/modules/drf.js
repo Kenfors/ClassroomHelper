@@ -91,6 +91,11 @@ const mutations = {
   },
   
   setSubmissionComment: (state, subText) => {
+    for(let i = 0; i < state.submissionTexts.length; i++)
+      if(state.submissionTexts[i].id === subText.id) {
+        state.submissionTexts[i].text = subText.text;
+        return;
+      }
     state.submissionTexts.push(subText);
   },
 
