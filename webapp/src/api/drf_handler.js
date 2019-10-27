@@ -72,7 +72,12 @@ export default {
             let success = (this.readyState == 4 && this.status == 200);
             //context.commit('saveAgendaStatus', success);
         };
-
+        
+        let subText = {
+            id: data.sub,
+            text: data.text,
+        }
+        context.commit('setSubmissionComment', subText);
         fetch.open("POST", "/api/submission/save", true);
         fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
         fetch.setRequestHeader("Content-Type", "application/json");
