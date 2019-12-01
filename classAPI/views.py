@@ -6,6 +6,7 @@ from .serializers import UserSerializer #,GroupSerializer
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse, Http404
 from .models import courseAgenda, courseSubmissionText
+from django.db.models import Q
 import json
 
 # Create your views here.
@@ -147,9 +148,10 @@ def saveSubmissionText(request):
         if (courseSubmissionText.objects.filter(userKey=user, student=requestData['stu'], submission=requestData['sub']).exists()):
             submissionText = courseSubmissionText.objects.get(userKey=user, student=requestData['stu'], submission=requestData['sub'])
             submissionText.text = requestData['text']
+            submissionText.course = requestData['course']
             submissionText.save()
         else:
-            submissionText = courseSubmissionText(userKey=user, student=requestData['stu'], submission=requestData['sub'], text=requestData['text'])
+            submissionText = courseSubmissionText(userKey=user, student=requestData['stu'], submission=requestData['sub'], course=requestData['course'], text=requestData['text'])
             submissionText.save()
     except:
         print("E: Cant save submission. :(")
@@ -164,10 +166,11 @@ def listPosts(request):
     
     requestData = json.loads(request.body)
     stuId = requestData['id']
+    courseId = requestData['course']
 
 
     user = request.user
-    posts = courseSubmissionText.objects.filter(userKey=user, student=stuId);
+    posts = courseSubmissionText.objects.filter(Q(course=courseId) | Q(course="none"), userKey=user, student=stuId);
 
     jsonList = []
     for post in posts:

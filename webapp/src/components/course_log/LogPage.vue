@@ -12,7 +12,7 @@
           v-on:click="chooseStudent(index, student.id, student.profile.name.fullName)">
             {{student.profile.name.fullName}}
           </div>
-          <textarea disabled placeholder="Funktion ej klar" class="form-control col-8" id="" cols="2" rows="2" style="resize: none;"></textarea>
+          <log-text class="col-8"></log-text>
         </div>
       </div>
       <div class="col-6 bg-info">
@@ -41,11 +41,12 @@
 <script>
 
 import {mapActions, mapGetters} from 'vuex'
+import LogText from './LogText.vue'
 
 export default {
   name: 'app',
   components: {
-      
+      LogText
   },
   data: function () {
     return {
@@ -87,10 +88,16 @@ export default {
           }
           vm.Logs = data.context;
       };
+
+      let requestdata = {
+        'id': id,
+        'course' : this.$route.params['courseid']
+      }
+
       fetch.open("POST", "/api/summary", true);
       fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
       fetch.setRequestHeader("Content-Type", "application/json");
-      fetch.send(JSON.stringify({'id': id}));
+      fetch.send(JSON.stringify(requestdata));
 
     },
 
