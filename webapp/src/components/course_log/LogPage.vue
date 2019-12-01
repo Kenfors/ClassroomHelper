@@ -2,7 +2,9 @@
 
 <template>
 <div class="col">
-    <h3 class="display-4 mb-5">Loggbok</h3>
+    <h3 class="display-4">Loggbok</h3>
+    <p>Här kan du skriva logginlägg för elever, utan anknytning till uppgift</p>
+    <p>Markera ett namn i listan för att läsa samtliga kommentarer för elev</p>
     <div class="col-12 row">
       <div class="col-6 list-group">
         <div class="text-dark text-truncate row ml-1"
@@ -12,10 +14,10 @@
           v-on:click="chooseStudent(index, student.id, student.profile.name.fullName)">
             {{student.profile.name.fullName}}
           </div>
-          <textarea disabled placeholder="Funktion ej klar" class="form-control col-8" id="" cols="2" rows="2" style="resize: none;"></textarea>
+          <log-text class="col-8" v-bind:Student=student></log-text>
         </div>
       </div>
-      <div class="col-6 bg-info">
+      <div class="col-6 bg-info sticky-top">
         <div class="container-fluid"
         v-if="!Loading">
           <div class=""
@@ -41,11 +43,12 @@
 <script>
 
 import {mapActions, mapGetters} from 'vuex'
+import LogText from './LogText.vue'
 
 export default {
   name: 'app',
   components: {
-      
+      LogText
   },
   data: function () {
     return {
@@ -87,10 +90,16 @@ export default {
           }
           vm.Logs = data.context;
       };
+
+      let requestdata = {
+        'id': id,
+        'course' : this.$route.params['courseid']
+      }
+
       fetch.open("POST", "/api/summary", true);
       fetch.setRequestHeader("X-Requested-With", "XMLHttpRequest")
       fetch.setRequestHeader("Content-Type", "application/json");
-      fetch.send(JSON.stringify({'id': id}));
+      fetch.send(JSON.stringify(requestdata));
 
     },
 
