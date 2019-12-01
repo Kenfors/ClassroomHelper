@@ -2,7 +2,9 @@
 
 <template>
 <div class="col">
-    <h3 class="display-4 mb-5">Loggbok</h3>
+    <h3 class="display-4">Loggbok</h3>
+    <p>Här kan du skriva logginlägg för elever, utan anknytning till uppgift</p>
+    <p>Markera ett namn i listan för att läsa samtliga kommentarer för elev</p>
     <div class="col-12 row">
       <div class="col-6 list-group">
         <div class="text-dark text-truncate row ml-1"
@@ -12,10 +14,10 @@
           v-on:click="chooseStudent(index, student.id, student.profile.name.fullName)">
             {{student.profile.name.fullName}}
           </div>
-          <log-text class="col-8"></log-text>
+          <log-text class="col-8" v-bind:Student=student></log-text>
         </div>
       </div>
-      <div class="col-6 bg-info">
+      <div class="col-6 bg-info sticky-top">
         <div class="container-fluid"
         v-if="!Loading">
           <div class=""

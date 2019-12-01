@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse, Http404
 from .models import courseAgenda, courseSubmissionText
 from django.db.models import Q
+import datetime
 import json
 
 # Create your views here.
@@ -141,6 +142,9 @@ def saveSubmissionText(request):
     requestData = json.loads(request.body)
     print("Submission Save Text Request:")
     print(requestData)
+
+    if not 'sub' in requestData:
+        requestData['sub'] = "Log" + str(datetime.datetime.now())
     
     try:
         user = request.user
